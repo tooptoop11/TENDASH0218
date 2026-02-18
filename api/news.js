@@ -1,9 +1,13 @@
 import { XMLParser } from "fast-xml-parser";
-import sourcesConfig from "../_lib/sources.json";
+import { readFileSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
-// Use the RSS proxy to reduce 403/429 issues from some publishers
-const RSS_PROXY_PATH = "/api/rss-proxy";
-const proxyUrl = (u) => `${RSS_PROXY_PATH}?url=${encodeURIComponent(u)}`;
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const sourcesConfig = JSON.parse(
+  readFileSync(join(__dirname, "_lib/sources.json"), "utf-8")
+);
+
 const DEFAULT_TIMEOUT_MS = 8000;
 const MAX_ITEMS = 60;
 const MAX_RESOLVE = 20;
@@ -142,25 +146,32 @@ const sortByDateDesc = (a, b) => {
   return db - da;
 };
 
-export async function onRequestGet({ request }) {
+export default async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Cache-Control", "public, max-age=15, s-maxage=15");
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+  if (req.method === "OPTIONS") return res.status(200).end();
+
   try {
     const sources = sourcesConfig.sources || [];
-    const origin = new URL(request.url).origin;
+    const proto = req.headers["x-forwarded-proto"] || "https";
+    const origin = `${proto}://${req.headers.host}`;
 
     const results = await Promise.all(
       sources.map(async (source) => {
         try {
-          // 1. Tentative directe (rapide)
+          // 1. Tentative directe
           const xml = await fetchXml(source.url);
           return parseFeed(xml, source);
         } catch {
           // 2. Proxy de secours
           try {
-            const fallbackUrl = `${origin}${proxyUrl(source.url)}`;
+            const fallbackUrl = `${origin}/api/rss-proxy?url=${encodeURIComponent(source.url)}`;
             const proxiedXml = await fetchXml(fallbackUrl);
             return parseFeed(proxiedXml, source);
           } catch {
-            // 3. Échec total pour cette source
             return [];
           }
         }
@@ -188,28 +199,12 @@ export async function onRequestGet({ request }) {
 
     const items = deduped.sort(sortByDateDesc).slice(0, MAX_ITEMS);
 
-    return new Response(
-      JSON.stringify({
-        updatedAt: new Date().toISOString(),
-        items,
-        sources: sources.map((s) => s.name),
-      }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          "Cache-Control": "public, max-age=15, s-maxage=15",
-          "Access-Control-Allow-Origin": "*",
-        },
-      }
-    );
-  } catch {
-    return new Response(JSON.stringify({ error: "Failed to fetch feeds" }), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        "Access-Control-Allow-Origin": "*",
-      },
+    return res.status(200).json({
+      updatedAt: new Date().toISOString(),
+      items,
+      sources: sources.map((s) => s.name),
     });
+  } catch (err) {
+    return res.status(500).json({ error: "Failed to fetch feeds", detail: err?.message });
   }
 }

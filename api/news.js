@@ -1,14 +1,12 @@
-const { XMLParser } = require("fast-xml-parser");
-const fs = require("fs");
-const path = require("path");
+import { XMLParser } from "fast-xml-parser";
+import sourcesConfig from "../_lib/sources.json";
 
-const sourcesConfig = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "_lib", "sources.json"), "utf-8")
-);
-
+// Use the RSS proxy to reduce 403/429 issues from some publishers
+const RSS_PROXY_PATH = "/api/rss-proxy";
+const proxyUrl = (u) => `${RSS_PROXY_PATH}?url=${encodeURIComponent(u)}`;
 const DEFAULT_TIMEOUT_MS = 8000;
-const MAX_ITEMS = 120;
-const MAX_RESOLVE = 30;
+const MAX_ITEMS = 60;
+const MAX_RESOLVE = 20;
 
 const parser = new XMLParser({
   ignoreAttributes: false,
@@ -19,22 +17,28 @@ const parser = new XMLParser({
 
 const googleLinkCache = new Map();
 
-const withTimeout = (promiseFactory, ms = DEFAULT_TIMEOUT_MS) => {
+const withTimeout = async (promise, ms) => {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), ms);
-  return promiseFactory(controller.signal)
-    .finally(() => clearTimeout(timer));
+  try {
+    const result = await promise(controller.signal);
+    clearTimeout(timer);
+    return result;
+  } catch (error) {
+    clearTimeout(timer);
+    throw error;
+  }
 };
 
 const fetchXml = async (url) =>
   withTimeout(async (signal) => {
     const res = await fetch(url, {
       signal,
-      headers: { "User-Agent": "TEN-Dashboard-Vercel/1.0" },
+      headers: { "User-Agent": "TEN-Dashboard/1.0" },
     });
     if (!res.ok) throw new Error(`Fetch failed ${res.status}`);
     return res.text();
-  });
+  }, DEFAULT_TIMEOUT_MS);
 
 const decodeHtml = (value = "") =>
   value
@@ -56,9 +60,14 @@ const resolveGoogleLink = async (url) => {
   if (!url || !url.includes("news.google.com/rss/articles/")) return url;
   if (googleLinkCache.has(url)) return googleLinkCache.get(url);
   try {
-    const res = await withTimeout(async (signal) =>
-      fetch(url, { signal, redirect: "follow", headers: { "User-Agent": "TEN-Dashboard-Vercel/1.0" } })
-    );
+    const res = await withTimeout(async (signal) => {
+      const response = await fetch(url, {
+        signal,
+        redirect: "follow",
+        headers: { "User-Agent": "TEN-Dashboard/1.0" },
+      });
+      return response;
+    }, DEFAULT_TIMEOUT_MS);
     const resolved = res.url || url;
     googleLinkCache.set(url, resolved);
     return resolved;
@@ -133,17 +142,27 @@ const sortByDateDesc = (a, b) => {
   return db - da;
 };
 
-module.exports = async function handler(req, res) {
+export async function onRequestGet({ request }) {
   try {
     const sources = sourcesConfig.sources || [];
+    const origin = new URL(request.url).origin;
 
     const results = await Promise.all(
       sources.map(async (source) => {
         try {
+          // 1. Tentative directe (rapide)
           const xml = await fetchXml(source.url);
           return parseFeed(xml, source);
         } catch {
-          return [];
+          // 2. Proxy de secours
+          try {
+            const fallbackUrl = `${origin}${proxyUrl(source.url)}`;
+            const proxiedXml = await fetchXml(fallbackUrl);
+            return parseFeed(proxiedXml, source);
+          } catch {
+            // 3. Échec total pour cette source
+            return [];
+          }
         }
       })
     );
@@ -169,12 +188,28 @@ module.exports = async function handler(req, res) {
 
     const items = deduped.sort(sortByDateDesc).slice(0, MAX_ITEMS);
 
-    res.status(200).json({
-      updatedAt: new Date().toISOString(),
-      items,
-      sources: sources.map((s) => s.name),
+    return new Response(
+      JSON.stringify({
+        updatedAt: new Date().toISOString(),
+        items,
+        sources: sources.map((s) => s.name),
+      }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": "public, max-age=15, s-maxage=15",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );
+  } catch {
+    return new Response(JSON.stringify({ error: "Failed to fetch feeds" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Origin": "*",
+      },
     });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to fetch feeds", detail: String(err && err.message) });
   }
-};
+}

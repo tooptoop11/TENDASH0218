@@ -1,0 +1,492 @@
+{
+  "sources": [
+    {
+      "name": "Le Monde - Une",
+      "url": "https://www.lemonde.fr/rss/une.xml",
+      "country": "🇫🇷",
+      "type": "press",
+      "tier": "A",
+      "topic": "general"
+    },
+    {
+      "name": "Le Monde - International",
+      "url": "https://www.lemonde.fr/international/rss_full.xml",
+      "country": "🇫🇷",
+      "type": "press",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "Le Monde - Économie",
+      "url": "https://www.lemonde.fr/economie/rss_full.xml",
+      "country": "🇫🇷",
+      "type": "press",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "Le Figaro - Actualités",
+      "url": "https://www.lefigaro.fr/rss/figaro_actualites.xml",
+      "country": "🇫🇷",
+      "type": "press",
+      "tier": "A",
+      "topic": "general"
+    },
+    {
+      "name": "Les Echos - Une",
+      "url": "https://www.lesechos.fr/rss/rss_une.xml",
+      "country": "🇫🇷",
+      "type": "press",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "Les Echos - Monde",
+      "url": "https://www.lesechos.fr/rss/rss_monde.xml",
+      "country": "🇫🇷",
+      "type": "press",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "La Tribune - À la une",
+      "url": "https://www.latribune.fr/rss",
+      "country": "🇫🇷",
+      "type": "press",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "Franceinfo - Titres",
+      "url": "https://www.francetvinfo.fr/titres.rss",
+      "country": "🇫🇷",
+      "type": "press",
+      "tier": "A",
+      "topic": "general"
+    },
+    {
+      "name": "RFI - Monde",
+      "url": "https://www.rfi.fr/fr/rss",
+      "country": "🇫🇷",
+      "type": "press",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "France 24 - World",
+      "url": "https://www.france24.com/en/rss",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "Courrier international - À la une",
+      "url": "https://www.courrierinternational.com/feed/all/rss.xml",
+      "country": "🇫🇷",
+      "type": "press",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "BBC - World",
+      "url": "http://feeds.bbci.co.uk/news/world/rss.xml",
+      "country": "🇬🇧",
+      "type": "press",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "BBC - Business",
+      "url": "http://feeds.bbci.co.uk/news/business/rss.xml",
+      "country": "🇬🇧",
+      "type": "press",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "The Guardian - World",
+      "url": "https://www.theguardian.com/world/rss",
+      "country": "🇬🇧",
+      "type": "press",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "The Guardian - Business",
+      "url": "https://www.theguardian.com/uk/business/rss",
+      "country": "🇬🇧",
+      "type": "press",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "Reuters - Top News",
+      "url": "https://feeds.reuters.com/reuters/topNews",
+      "country": "🌍",
+      "type": "wire",
+      "tier": "A",
+      "topic": "general"
+    },
+    {
+      "name": "Reuters - Business",
+      "url": "https://feeds.reuters.com/reuters/businessNews",
+      "country": "🌍",
+      "type": "wire",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "DW - Top Stories",
+      "url": "https://rss.dw.com/rdf/rss-en-top",
+      "country": "🇩🇪",
+      "type": "press",
+      "tier": "A",
+      "topic": "general"
+    },
+    {
+      "name": "Al Jazeera - All",
+      "url": "https://www.aljazeera.com/xml/rss/all.xml",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "NYT - World",
+      "url": "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
+      "country": "🇺🇸",
+      "type": "press",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "NYT - Business",
+      "url": "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml",
+      "country": "🇺🇸",
+      "type": "press",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "Washington Post - World",
+      "url": "https://feeds.washingtonpost.com/rss/world",
+      "country": "🇺🇸",
+      "type": "press",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "POLITICO Europe",
+      "url": "https://www.politico.eu/feed/",
+      "country": "🇪🇺",
+      "type": "press",
+      "tier": "A",
+      "topic": "eu"
+    },
+    {
+      "name": "Euractiv",
+      "url": "https://www.euractiv.com/feed/",
+      "country": "🇪🇺",
+      "type": "press",
+      "tier": "A",
+      "topic": "eu"
+    },
+    {
+      "name": "EUobserver",
+      "url": "https://euobserver.com/rss",
+      "country": "🇪🇺",
+      "type": "press",
+      "tier": "A",
+      "topic": "eu"
+    },
+    {
+      "name": "Semafor",
+      "url": "https://www.semafor.com/rss.xml",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "general"
+    },
+    {
+      "name": "The Economist - Latest",
+      "url": "https://www.economist.com/latest/rss.xml",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "general"
+    },
+    {
+      "name": "Google News - France (top)",
+      "url": "https://news.google.com/rss?hl=fr&gl=FR&ceid=FR:fr",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "general"
+    },
+    {
+      "name": "Google News - World (top)",
+      "url": "https://news.google.com/rss?hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "world"
+    },
+    {
+      "name": "Bloomberg - Markets",
+      "url": "https://feeds.bloomberg.com/markets/news.rss",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "markets"
+    },
+    {
+      "name": "Bloomberg - Economics",
+      "url": "https://feeds.bloomberg.com/economics/news.rss",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "Bloomberg - Business",
+      "url": "https://feeds.bloomberg.com/business/news.rss",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "Bloomberg - Technology",
+      "url": "https://feeds.bloomberg.com/technology/news.rss",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "tech"
+    },
+    {
+      "name": "Financial Times - World",
+      "url": "https://www.ft.com/world?format=rss",
+      "country": "🇬🇧",
+      "type": "press",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "Financial Times - Companies",
+      "url": "https://www.ft.com/companies?format=rss",
+      "country": "🇬🇧",
+      "type": "press",
+      "tier": "A",
+      "topic": "business"
+    },
+    {
+      "name": "Energy Voice",
+      "url": "https://www.energyvoice.com/feed/",
+      "country": "🛢️",
+      "type": "industry",
+      "tier": "B",
+      "topic": "energy"
+    },
+    {
+      "name": "Offshore Energy",
+      "url": "https://www.offshore-energy.biz/feed/",
+      "country": "🛢️",
+      "type": "industry",
+      "tier": "B",
+      "topic": "offshore"
+    },
+    {
+      "name": "World Oil",
+      "url": "https://www.worldoil.com/feed",
+      "country": "🛢️",
+      "type": "industry",
+      "tier": "B",
+      "topic": "oil"
+    },
+    {
+      "name": "Rigzone",
+      "url": "http://www.rigzone.com/rss/news.aspx",
+      "country": "🛢️",
+      "type": "industry",
+      "tier": "B",
+      "topic": "oil"
+    },
+    {
+      "name": "Carbon Brief",
+      "url": "https://www.carbonbrief.org/feed/",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "climate"
+    },
+    {
+      "name": "Inside Climate News",
+      "url": "https://insideclimatenews.org/feed/",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "climate"
+    },
+    {
+      "name": "EIA - Today in Energy",
+      "url": "https://www.eia.gov/rss/todayinenergy.xml",
+      "country": "🇺🇸",
+      "type": "official",
+      "tier": "A",
+      "topic": "energy"
+    },
+    {
+      "name": "EIA - Press Releases",
+      "url": "https://www.eia.gov/rss/press_rss.xml",
+      "country": "🇺🇸",
+      "type": "official",
+      "tier": "A",
+      "topic": "energy"
+    },
+    {
+      "name": "Google News - Oil",
+      "url": "https://news.google.com/rss/search?q=oil%20price%20OPEC%20Brent%20WTI&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "oil"
+    },
+    {
+      "name": "Google News - Gas",
+      "url": "https://news.google.com/rss/search?q=natural%20gas%20LNG%20TTF%20Henry%20Hub&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "gas"
+    },
+    {
+      "name": "Google News - Renewables",
+      "url": "https://news.google.com/rss/search?q=renewable%20energy%20solar%20wind%20grid&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "renewables"
+    },
+    {
+      "name": "Google News - Hydrogen",
+      "url": "https://news.google.com/rss/search?q=hydrogen%20electrolyser%20ammonia%20e-fuels&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "hydrogen"
+    },
+    {
+      "name": "European Parliament - News",
+      "url": "https://www.europarl.europa.eu/rss/doc/topstories/en.xml",
+      "country": "🇪🇺",
+      "type": "official",
+      "tier": "A",
+      "topic": "eu"
+    },
+    {
+      "name": "UN - News",
+      "url": "https://news.un.org/feed/subscribe/en/news/all/rss.xml",
+      "country": "🌍",
+      "type": "official",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "OECD - Newsroom",
+      "url": "https://www.oecd.org/newsroom/rss.xml",
+      "country": "🌍",
+      "type": "official",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "IMF - News",
+      "url": "https://www.imf.org/en/News/RSS",
+      "country": "🌍",
+      "type": "official",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "World Bank - News",
+      "url": "https://www.worldbank.org/en/news/all?format=rss",
+      "country": "🌍",
+      "type": "official",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "US Fed - Press Releases",
+      "url": "https://www.federalreserve.gov/feeds/press_all.xml",
+      "country": "🇺🇸",
+      "type": "official",
+      "tier": "A",
+      "topic": "macro"
+    },
+    {
+      "name": "ECB - Press Releases",
+      "url": "https://www.ecb.europa.eu/press/pr/html/index.en.rss",
+      "country": "🇪🇺",
+      "type": "official",
+      "tier": "A",
+      "topic": "macro"
+    },
+    {
+      "name": "OFAC - Recent Actions",
+      "url": "https://home.treasury.gov/ofac/recent-actions/rss",
+      "country": "🇺🇸",
+      "type": "official",
+      "tier": "A",
+      "topic": "sanctions"
+    },
+    {
+      "name": "IAEA - News",
+      "url": "https://www.iaea.org/rss/news.xml",
+      "country": "🌍",
+      "type": "official",
+      "tier": "A",
+      "topic": "nuclear"
+    },
+    {
+      "name": "IAEA - Press Releases",
+      "url": "https://www.iaea.org/rss/pressreleases.xml",
+      "country": "🌍",
+      "type": "official",
+      "tier": "A",
+      "topic": "nuclear"
+    },
+    {
+      "name": "Google News - TotalEnergies",
+      "url": "https://news.google.com/rss/search?q=TotalEnergies&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "company"
+    },
+    {
+      "name": "Google News - Patrick Pouyanné",
+      "url": "https://news.google.com/rss/search?q=Patrick%20Pouyann%C3%A9&hl=fr&gl=FR&ceid=FR:fr",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "company"
+    },
+    {
+      "name": "Google News - EU regulation (DMA/DSA/AI Act)",
+      "url": "https://news.google.com/rss/search?q=DMA%20DSA%20AI%20Act%20European%20Commission%20antitrust%20interim%20measures&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "regulation"
+    },
+    {
+      "name": "Google News - sanctions (EU/US)",
+      "url": "https://news.google.com/rss/search?q=EU%20sanctions%20US%20sanctions%20OFAC%20Russia%20Iran%20oil%20gas&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "sanctions"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "sources": [
+    {
+      "name": "European Parliament - News",
+      "url": "https://www.europarl.europa.eu/rss/doc/topstories/en.xml",
+      "country": "🇪🇺",
+      "type": "official",
+      "tier": "A",
+      "topic": "eu"
+    },
+    {
+      "name": "UN - News",
+      "url": "https://news.un.org/feed/subscribe/en/news/all/rss.xml",
+      "country": "🌍",
+      "type": "official",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "OECD - Newsroom",
+      "url": "https://www.oecd.org/newsroom/rss.xml",
+      "country": "🌍",
+      "type": "official",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "IMF - News",
+      "url": "https://www.imf.org/en/News/RSS",
+      "country": "🌍",
+      "type": "official",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "World Bank - News",
+      "url": "https://www.worldbank.org/en/news/all?format=rss",
+      "country": "🌍",
+      "type": "official",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "US Fed - Press Releases",
+      "url": "https://www.federalreserve.gov/feeds/press_all.xml",
+      "country": "🇺🇸",
+      "type": "official",
+      "tier": "A",
+      "topic": "macro"
+    },
+    {
+      "name": "ECB - Press Releases",
+      "url": "https://www.ecb.europa.eu/press/pr/html/index.en.rss",
+      "country": "🇪🇺",
+      "type": "official",
+      "tier": "A",
+      "topic": "macro"
+    },
+    {
+      "name": "OFAC - Recent Actions",
+      "url": "https://home.treasury.gov/ofac/recent-actions/rss",
+      "country": "🇺🇸",
+      "type": "official",
+      "tier": "A",
+      "topic": "sanctions"
+    },
+    {
+      "name": "IAEA - News",
+      "url": "https://www.iaea.org/rss/news.xml",
+      "country": "🌍",
+      "type": "official",
+      "tier": "A",
+      "topic": "nuclear"
+    },
+    {
+      "name": "IAEA - Press Releases",
+      "url": "https://www.iaea.org/rss/pressreleases.xml",
+      "country": "🌍",
+      "type": "official",
+      "tier": "A",
+      "topic": "nuclear"
+    },
+    {
+      "name": "Google News - TotalEnergies",
+      "url": "https://news.google.com/rss/search?q=TotalEnergies&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "company"
+    },
+    {
+      "name": "Google News - Patrick Pouyanné",
+      "url": "https://news.google.com/rss/search?q=Patrick%20Pouyann%C3%A9&hl=fr&gl=FR&ceid=FR:fr",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "company"
+    },
+    {
+      "name": "Google News - EU regulation (DMA/DSA/AI Act)",
+      "url": "https://news.google.com/rss/search?q=DMA%20DSA%20AI%20Act%20European%20Commission%20antitrust%20interim%20measures&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "regulation"
+    },
+    {
+      "name": "Google News - sanctions (EU/US)",
+      "url": "https://news.google.com/rss/search?q=EU%20sanctions%20US%20sanctions%20OFAC%20Russia%20Iran%20oil%20gas&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "sanctions"
+    }
+  ]
+}

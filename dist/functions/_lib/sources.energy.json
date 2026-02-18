@@ -1,0 +1,148 @@
+{
+  "sources": [
+    {
+      "name": "Bloomberg - Markets",
+      "url": "https://feeds.bloomberg.com/markets/news.rss",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "markets"
+    },
+    {
+      "name": "Bloomberg - Economics",
+      "url": "https://feeds.bloomberg.com/economics/news.rss",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "Bloomberg - Business",
+      "url": "https://feeds.bloomberg.com/business/news.rss",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "economy"
+    },
+    {
+      "name": "Bloomberg - Technology",
+      "url": "https://feeds.bloomberg.com/technology/news.rss",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "tech"
+    },
+    {
+      "name": "Financial Times - World",
+      "url": "https://www.ft.com/world?format=rss",
+      "country": "🇬🇧",
+      "type": "press",
+      "tier": "A",
+      "topic": "world"
+    },
+    {
+      "name": "Financial Times - Companies",
+      "url": "https://www.ft.com/companies?format=rss",
+      "country": "🇬🇧",
+      "type": "press",
+      "tier": "A",
+      "topic": "business"
+    },
+    {
+      "name": "Energy Voice",
+      "url": "https://www.energyvoice.com/feed/",
+      "country": "🛢️",
+      "type": "industry",
+      "tier": "B",
+      "topic": "energy"
+    },
+    {
+      "name": "Offshore Energy",
+      "url": "https://www.offshore-energy.biz/feed/",
+      "country": "🛢️",
+      "type": "industry",
+      "tier": "B",
+      "topic": "offshore"
+    },
+    {
+      "name": "World Oil",
+      "url": "https://www.worldoil.com/feed",
+      "country": "🛢️",
+      "type": "industry",
+      "tier": "B",
+      "topic": "oil"
+    },
+    {
+      "name": "Rigzone",
+      "url": "http://www.rigzone.com/rss/news.aspx",
+      "country": "🛢️",
+      "type": "industry",
+      "tier": "B",
+      "topic": "oil"
+    },
+    {
+      "name": "Carbon Brief",
+      "url": "https://www.carbonbrief.org/feed/",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "climate"
+    },
+    {
+      "name": "Inside Climate News",
+      "url": "https://insideclimatenews.org/feed/",
+      "country": "🌍",
+      "type": "press",
+      "tier": "A",
+      "topic": "climate"
+    },
+    {
+      "name": "EIA - Today in Energy",
+      "url": "https://www.eia.gov/rss/todayinenergy.xml",
+      "country": "🇺🇸",
+      "type": "official",
+      "tier": "A",
+      "topic": "energy"
+    },
+    {
+      "name": "EIA - Press Releases",
+      "url": "https://www.eia.gov/rss/press_rss.xml",
+      "country": "🇺🇸",
+      "type": "official",
+      "tier": "A",
+      "topic": "energy"
+    },
+    {
+      "name": "Google News - Oil",
+      "url": "https://news.google.com/rss/search?q=oil%20price%20OPEC%20Brent%20WTI&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "oil"
+    },
+    {
+      "name": "Google News - Gas",
+      "url": "https://news.google.com/rss/search?q=natural%20gas%20LNG%20TTF%20Henry%20Hub&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "gas"
+    },
+    {
+      "name": "Google News - Renewables",
+      "url": "https://news.google.com/rss/search?q=renewable%20energy%20solar%20wind%20grid&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "renewables"
+    },
+    {
+      "name": "Google News - Hydrogen",
+      "url": "https://news.google.com/rss/search?q=hydrogen%20electrolyser%20ammonia%20e-fuels&hl=en&gl=US&ceid=US:en",
+      "country": "🔍",
+      "type": "aggregator",
+      "tier": "B",
+      "topic": "hydrogen"
+    }
+  ]
+}

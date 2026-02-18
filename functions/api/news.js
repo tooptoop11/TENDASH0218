@@ -1,7 +1,6 @@
 import { XMLParser } from "fast-xml-parser";
 import sourcesConfig from "../_lib/sources.json";
 
-
 // Use the RSS proxy to reduce 403/429 issues from some publishers
 const RSS_PROXY_PATH = "/api/rss-proxy";
 const proxyUrl = (u) => `${RSS_PROXY_PATH}?url=${encodeURIComponent(u)}`;
@@ -143,17 +142,27 @@ const sortByDateDesc = (a, b) => {
   return db - da;
 };
 
-export async function onRequestGet() {
+export async function onRequestGet({ request }) {
   try {
     const sources = sourcesConfig.sources || [];
+    const origin = new URL(request.url).origin;
 
     const results = await Promise.all(
       sources.map(async (source) => {
         try {
+          // 1. Tentative directe (rapide)
           const xml = await fetchXml(source.url);
           return parseFeed(xml, source);
         } catch {
-          return [];
+          // 2. Proxy de secours
+          try {
+            const fallbackUrl = `${origin}${proxyUrl(source.url)}`;
+            const proxiedXml = await fetchXml(fallbackUrl);
+            return parseFeed(proxiedXml, source);
+          } catch {
+            // 3. Échec total pour cette source
+            return [];
+          }
         }
       })
     );

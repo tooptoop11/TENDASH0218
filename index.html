@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEN Dashboard V5 - 32 Cards Complètes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    @keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+    .animate-pulse-slow { animation: pulse-slow 2s ease-in-out infinite; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary { list-style: none; }
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: #1e293b; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+    .glass { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); }
+  </style>
+</head>
+<body class="bg-slate-950">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // ============================================
+    // TEN DASHBOARD V5 - 32 CARDS COMPLÈTES
+    // Structure validée avec codes officiels
+    // Data: 1er au 8 février 2026
+    // ============================================
+
+    // ========== MEN-01: LIVE STREAM ==========
+    const mentionsData = [
+      {
+        id: 1, source: "TOTALENERGIES.COM", country: "🇳🇦", time: "6 fév 2026",
+        title: "TotalEnergies acquiert 33,33% du bloc offshore PEL 104 en Namibie",
+        excerpt: "Le groupe renforce son exposition exploration en Namibie via l'entrée au bloc PEL 104, dans le bassin d'Orange.",
+        quote: "Cette entrée dans le permis PEL 104 en Namibie complète notre position d'exploration dans le bassin d'Orange.",
+        sentiment: "positive", tag: "geopolitical", priority: "🔴 Haute",
+        source_url: "https://totalenergies.com/news/press-releases/totalenergies-acquires-stake-pel-104-offshore-block-namibia"
+      },
+      {
+        id: 2, source: "BLOOMBERG", country: "🇳🇦", time: "6 fév 2026",
+        title: "Bloomberg: TotalEnergies élargit sa présence offshore en Namibie",
+        excerpt: "Couverture financière de l'opération PEL 104 et de la stratégie d'exploration en Afrique australe.",
+        quote: "TotalEnergies is expanding its offshore presence in Namibia with a new stake in PEL 104.",
+        sentiment: "positive", tag: "geopolitical", priority: "🟠 Moyenne",
+        source_url: "https://www.bloomberg.com/news/articles/2026-02-06/totalenergies-expands-offshore-presence-in-namibia"
+      },
+      {
+        id: 3, source: "TOTALENERGIES.COM", country: "🇰🇼", time: "3 fév 2026",
+        title: "TotalEnergies et Kuwait Petroleum signent un MoU énergétique stratégique",
+        excerpt: "Accord de coopération sur l'énergie et les infrastructures, avec un axe de partenariat long terme.",
+        quote: "TotalEnergies and Kuwait Petroleum Corporation signed a strategic memorandum of understanding.",
+        sentiment: "positive", tag: "geopolitical", priority: "🔴 Haute",
+        source_url: "https://totalenergies.com/news/press-releases/totalenergies-and-kuwait-petroleum-corporation-sign-strategic-mou"
+      },
+      {
+        id: 4, source: "OPEC", country: "🛢️", time: "1 fév 2026",
+        title: "OPEC+ confirme le cadre de production pour le début de T1 2026",
+        excerpt: "Les marchés scrutent les quotas et l'effet sur le Brent; contexte de volatilité géopolitique persistante.",
+        quote: "The participating countries reaffirmed their commitment to market stability.",
+        sentiment: "neutral", tag: "geopolitical", priority: "🟠 Moyenne",
+        source_url: "https://www.opec.org/opec_web/en/press_room/7366.htm"
+      },
+      {
+        id: 5, source: "BARRON'S", country: "🇺🇸", time: "2 fév 2026",
+        title: "Le pétrole grimpe sur fond de pression géopolitique États-Unis / Iran",
+        excerpt: "Les tensions au Moyen-Orient soutiennent les prix du brut et ravivent la prime de risque.",
+        quote: "Oil prices rose as geopolitical pressure on Iran revived risk premium concerns.",
+        sentiment: "critical", tag: "geopolitical", priority: "🔴 Haute",
+        source_url: "https://www.barrons.com/articles/oil-prices-us-pressure-iran-65cb6f38"
+      },
+      {
+        id: 6, source: "FINANCIAL TIMES", country: "🌍", time: "6 fév 2026",
+        title: "Le brut chute puis rebondit après menaces tarifaires américaines",
+        excerpt: "L'instabilité macro et commerciale pèse sur la trajectoire court terme des valeurs énergie.",
+        quote: "Oil plunged then rebounded sharply as tariff threats rattled global growth expectations.",
+        sentiment: "critical", tag: null, priority: "🟠 Moyenne",
+        source_url: "https://www.ft.com/content/1f8f91d5-53d1-4f3f-aad8-2f26c17442f6"
+      },
+      {
+        id: 7, source: "ETF TRENDS", country: "🇺🇸", time: "7 fév 2026",
+        title: "Les flux reviennent sur XLE avec le rebond de l'énergie",
+        excerpt: "Les investisseurs renforcent les expositions énergie après le redressement du brut.",
+        quote: "XLE sees fresh inflows as energy stocks regain momentum.",
+        sentiment: "positive", tag: null, priority: "🟢 Basse",
+        source_url: "https://www.etftrends.com/energy-infrastructure-channel/the-weekly-pulse-energy-stocks-regain-ground-xle-sees-inflows/"
+      },
+      {
+        id: 8, source: "FX EMPIRE", country: "🇺🇸", time: "7 fév 2026",
+        title: "XLE tient en support malgré la volatilité pétrole",
+        excerpt: "Lecture technique et sectorielle: support des majors américaines en séance hebdomadaire.",
+        quote: "XLE remains supported as oil stabilizes and sentiment improves.",
+        sentiment: "neutral", tag: null, priority: "🟢 Basse",
+        source_url: "https://www.fxempire.com/forecasts/article/xle-holds-support-as-oil-rebounds-and-sector-sentiment-improves-1514516"
+      },
+    ];
+
+    // ========== MEN-02: 5 SUJETS CHAUDS ==========
+    const hotTopicsData = [
+      {
+        id: 1, emoji: "🇳🇦", title: "Namibie offshore (PEL 104)", subtitle: "Accélération exploration Afrique australe",
+        brief: "<strong>6 fév 2026</strong> : annonce officielle TotalEnergies + reprise médiatique Bloomberg. Sujet structurant pour le pipeline exploration et le narratif Afrique.",
+        actions: ["Q&A investisseurs sur le bassin d'Orange", "Points de parole sur discipline capital", "Suivi presse anglo-saxonne 72h", "Cartographie critiques ONG offshore"],
+        impact: "🔥 Critique", status: "🔥 Chaud", nature: "critical",
+      },
+      {
+        id: 2, emoji: "🇰🇼", title: "MoU Kuwait Petroleum", subtitle: "Ancrage partenarial Moyen-Orient",
+        brief: "<strong>3 fév 2026</strong> : signature d'un MoU stratégique avec KPC. Signal d'alignement régional et d'options industrielles additionnelles.",
+        actions: ["Préparer storytelling partenariat long terme", "Identifier retombées business court terme", "Activer éléments de langage coopération", "Alignement affaires publiques"],
+        impact: "🔥 Critique", status: "🔥 Chaud", nature: "critical",
+      },
+      {
+        id: 3, emoji: "🛢️", title: "OPEC+ / Quotas", subtitle: "Volatilité prix énergie court terme",
+        brief: "Suite à la réunion du <strong>1er février 2026</strong>, le marché reste focalisé sur la discipline de production et les effets prix sur les marges.",
+        actions: ["Brief marchés quotidien", "Scénarios prix Brent/WTI 2 semaines", "Messages prudence macro", "Coordination finance/IR"],
+        impact: "Élevé", status: "🔥 Chaud", nature: "critical",
+      },
+      {
+        id: 4, emoji: "🇺🇸", title: "Risque géopolitique Iran", subtitle: "Prime de risque sur le brut",
+        brief: "Couverture marché du <strong>2 au 7 fév 2026</strong> : tensions US-Iran et rebonds rapides du brut, forte sensibilité des valeurs énergétiques.",
+        actions: ["Monitoring intraday Brent/WTI", "FAQ volatilité pour dirigeants", "Scénarios d'escalade", "Préparation éléments presse économique"],
+        impact: "Élevé", status: "👁️ Surveiller", nature: "critical",
+      },
+      {
+        id: 5, emoji: "📈", title: "Flux investisseurs énergie", subtitle: "Retour des flux sur les ETF sectoriels",
+        brief: "Au <strong>7 fév 2026</strong>, les flux XLE repartent à la hausse, signal tactique sur l'appétit risque énergie.",
+        actions: ["Veille flux ETF quotidiens", "Benchmark TTE vs majors", "Angles opportunité investisseurs", "Ajustement narratif marché"],
+        impact: "Élevé", status: "👁️ Surveiller", nature: "critical",
+      },
+    ];
+
+    // ========== BRF-02: 3 LECTURES GÉOPOLITIQUES ==========
+    const geopoliticsData = [
+      { emoji: "🇳🇦", title: "Namibie : course offshore", context: "Entrée TotalEnergies sur PEL 104 (6 fév 2026). Le bassin d'Orange reste un front majeur de compétition exploration en Afrique australe." },
+      { emoji: "🇰🇼", title: "Golfe : alliances industrielles", context: "MoU stratégique TTE-KPC (3 fév 2026), signal de consolidation des partenariats énergétiques au Moyen-Orient." },
+      { emoji: "🛢️", title: "OPEC+ et volatilité prix", context: "Après la réunion du 1er février 2026, le marché oscille entre discipline d'offre et craintes de ralentissement macro." },
+    ];
+
+    // ========== BRF-03: 3 SIGNAUX MACRO ==========
+    const macroSignalsData = [
+      { emoji: "🛢️", indicator: "Brent", value: "~76,0$", change: "Volatilité élevée", negative: false },
+      { emoji: "⛽", indicator: "WTI", value: "~72,0$", change: "Sensibilité géopolitique", negative: false },
+      { emoji: "💹", indicator: "XLE ETF", value: "Flux en hausse", change: "Entrées nettes hebdo", negative: false },
+    ];
+
+    // ========== UNE-01: TOP COUVERTURES ==========
+    const topCoveragesData = [
+      { id: 1, source: "TOTALENERGIES.COM", tag: "Namibie", title: "TotalEnergies acquiert une participation dans PEL 104", excerpt: "Renforcement du portefeuille exploration offshore en Afrique australe.", critical: true },
+      { id: 2, source: "TOTALENERGIES.COM", tag: "Koweït", title: "MoU stratégique avec Kuwait Petroleum Corporation", excerpt: "Partenariat de coopération énergétique annoncé le 3 février 2026.", critical: true },
+      { id: 3, source: "BLOOMBERG", tag: "Marchés", title: "TotalEnergies étend son empreinte offshore en Namibie", excerpt: "Lecture investisseurs sur la stratégie d'exploration du groupe.", critical: true },
+      { id: 4, source: "FINANCIAL TIMES", tag: "Macro", title: "Le pétrole rebondit après une séquence de stress", excerpt: "Volatilité rapide liée aux menaces tarifaires et au risque géopolitique.", critical: true },
+    ];
+
+    // ========== SIG-01: 8 WEAK SIGNALS ==========
+    const weakSignalsData = [
+      { emoji: "🇳🇦", signal: "Accélération offshore Namibie", context: "Nouvelle participation TTE dans PEL 104. Signal de densification exploration dans le bassin d'Orange.", horizon: "Immédiat", impact: "🔥 Critique", nature: "critical" },
+      { emoji: "🇰🇼", signal: "MoU KPC: potentiel de pipeline", context: "Accord de coopération large, à transformer en annonces opérationnelles concrètes dans les prochains mois.", horizon: "2-8 semaines", impact: "Élevé", nature: "critical" },
+      { emoji: "🛢️", signal: "Volatilité OPEC+/macro", context: "Prix pétroliers sensibles aux arbitrages OPEC+ et aux signaux de ralentissement mondial.", horizon: "Immédiat", impact: "Élevé", nature: "critical" },
+      { emoji: "🇺🇸", signal: "Risque tarifaire US", context: "Les annonces commerciales américaines ont déjà provoqué des swings brutaux sur le brut.", horizon: "2-4 semaines", impact: "Élevé", nature: "critical" },
+      { emoji: "🇮🇷", signal: "Prime de risque géopolitique", context: "Tout durcissement sur le dossier Iran peut élargir rapidement la prime de risque sur Brent/WTI.", horizon: "Immédiat", impact: "Élevé", nature: "critical" },
+      { emoji: "📈", signal: "Flux ETF énergie", context: "Le retour des flux vers XLE peut amplifier la performance sectorielle à court terme.", horizon: "2-4 semaines", impact: "Moyen", nature: "positive" },
+      { emoji: "🌍", signal: "Narratif sécurité énergétique", context: "Le discours sécurité d'approvisionnement reprend du poids dans les médias investisseurs.", horizon: "1-3 mois", impact: "Moyen", nature: "neutral" },
+      { emoji: "⚖️", signal: "Pression climat persistante", context: "Le contexte juridique/réputationnel reste actif et peut se réactiver au moindre incident.", horizon: "1-3 mois", impact: "Élevé", nature: "critical" },
+    ];
+
+    // ========== SIG-02: BENCHMARK DATA ==========
+    const benchmarkData = {
+      tte: { price: "≈58,10€", change: "Mouvements hebdo", ytd: "n/a" },
+      tteNyse: { price: "≈$68,00", change: "Mouvements hebdo" },
+      shell: { price: "≈$74,50", change: "Risque macro" , ytd: "n/a" },
+      bp: { price: "≈£4,10", change: "Sous pression", ytd: "n/a" },
+      chevron: { price: "≈$147,00", change: "Stable", ytd: "n/a" },
+      brent: { price: "≈$76,0", change: "Très volatil" },
+      wti: { price: "≈$72,0", change: "Très volatil" },
+    };
+
+    // ========== INT-01: PRÉDICTION 48H ==========
+    const predictionScenarios = [
+      { title: "Amplification médiatique sur la Namibie", probability: 82, trigger: "Nouvelles analyses investisseurs offshore", action: "Pack narratif exploration + discipline capital" },
+      { title: "Décrochage/rebond pétrole en séance", probability: 78, trigger: "Signal OPEC+ ou tension Iran", action: "Cellule marchés active + messages de prudence" },
+      { title: "Questions presse sur le MoU KPC", probability: 74, trigger: "Relais régionaux supplémentaires", action: "Q&A coopération et valeur business" },
+      { title: "Pression climat sur nouveaux projets offshore", probability: 62, trigger: "Prises de parole ONG ciblées", action: "Réponses factuelles + calendrier de preuves" },
+      { title: "Narratif investisseurs favorable à l'énergie", probability: 68, trigger: "Poursuite des flux ETF", action: "Valoriser robustesse portefeuille multi-énergies" },
+    ];
+
+    // ========== INT-03: Q&A ==========
+    const qaData = [
+      {
+        topic: "Namibie - Participation PEL 104",
+        question: "Pourquoi renforcer l'exploration offshore en Namibie maintenant ?",
+        answer: "La prise de participation s'inscrit dans une logique de portefeuille long terme et de diversification géographique, avec une gestion disciplinée des risques techniques et financiers.",
+        keyMessages: ["Portefeuille long terme", "Discipline capital", "Position renforcée bassin d'Orange"],
+        pivots: ["Création de valeur durable", "Gestion rigoureuse des risques"],
+        avoid: ["Ne pas promettre de calendrier spéculatif", "Ne pas sur-vendre les volumes potentiels"],
+      },
+      {
+        topic: "Koweït - MoU stratégique",
+        question: "Que change concrètement le MoU signé avec KPC ?",
+        answer: "Le MoU structure un cadre de coopération renforcée. Les étapes suivantes viseront des déclinaisons opérationnelles selon les opportunités industrielles.",
+        keyMessages: ["Cadre stratégique", "Coopération long terme", "Approche pragmatique par projets"],
+        pivots: ["Partenariats industriels", "Sécurité énergétique"],
+        avoid: ["Ne pas annoncer de projets non confirmés", "Ne pas créer d'attente court terme excessive"],
+      },
+      {
+        topic: "Volatilité pétrole - OPEC+/Iran",
+        question: "Comment gérez-vous la volatilité récente des prix du brut ?",
+        answer: "Le groupe opère avec une logique de résilience, en pilotant ses activités sur des horizons longs et avec des hypothèses prudentes de marché.",
+        keyMessages: ["Résilience", "Pilotage long terme", "Hypothèses prudentes"],
+        pivots: ["Diversification multi-énergies", "Discipline opérationnelle"],
+        avoid: ["Ne pas commenter des niveaux de prix cibles", "Ne pas spéculer sur décisions politiques"],
+      },
+    ];
+
+    // ========== INT-04: MATRICE RISQUE/OPPORTUNITÉ ==========
+    const riskMatrixData = [
+      { name: "NAM", risk: 0.72, opportunity: 0.68 },
+      { name: "KPC", risk: 0.45, opportunity: 0.74 },
+      { name: "OPEC", risk: 0.70, opportunity: 0.34 },
+      { name: "IRAN", risk: 0.78, opportunity: 0.22 },
+      { name: "ETF", risk: 0.38, opportunity: 0.66 },
+      { name: "FT", risk: 0.58, opportunity: 0.41 },
+      { name: "ONG", risk: 0.67, opportunity: 0.15 },
+      { name: "GCC", risk: 0.40, opportunity: 0.62 },
+    ];
+
+    // ========== INT-06: DÉCRYPTAGE NARRATIF ADVERSE ==========
+    const ongData = [
+      { name: "Greenpeace", campaign: "Offshore expansion narrative", risk: "🔴 Critique", next: "Relais possibles sur dossiers Afrique australe" },
+      { name: "Reclaim Finance", campaign: "Capital allocation fossile", risk: "🟠 Élevé", next: "Comparatifs majors publiés en février" },
+      { name: "350.org", campaign: "Narratif 'new oil frontiers'", risk: "🟠 Élevé", next: "Amplification réseaux en cas de nouvelles annonces" },
+      { name: "Friends of the Earth", campaign: "Contradictions transition/expansion", risk: "🟠 Moyen", next: "Tribunes et prises de parole Q1" },
+    ];
+
+    // ========== OUT-08: CARTOGRAPHIE JOURNALISTES ==========
+    const journalistesData = [
+      { name: "Jean-Michel Bezat", media: "Le Monde", beat: "Énergie", sentiment: "🟠 Neutre", lastContact: "12/01/2026", notes: "Expert pétrole, suit TTE depuis 20 ans" },
+      { name: "Nabil Wakim", media: "Le Monde", beat: "Climat/Énergie", sentiment: "🔴 Critique", lastContact: "Aucun récent", notes: "Angles climat, à préparer" },
+      { name: "Sophie Fay", media: "L'Obs", beat: "Économie", sentiment: "🟠 Neutre", lastContact: "18/01/2026", notes: "Intérêt gouvernance, NAO" },
+      { name: "Jérôme Lefilliâtre", media: "Libération", beat: "Entreprises", sentiment: "🔴 Critique", lastContact: "03/01/2026", notes: "Angle critique systématique" },
+      { name: "Sharon Wajsbrot", media: "Les Échos", beat: "Énergie", sentiment: "🟢 Favorable", lastContact: "25/01/2026", notes: "Couverture équilibrée, bon contact" },
+    ];
+
+    // ========== OUT-10: RETOMBÉES CP ==========
+    const retombeesCPData = {
+      cpTitle: "Annonce Namibie (PEL 104) + MoU KPC",
+      cpDate: "Semaine du 1er au 8 février 2026",
+      kpis: {
+        totalRetombees: 39,
+        international: 29,
+        national: 10,
+        tonalitePositive: 17,
+        tonaliteNeutre: 16,
+        tonaliteNegative: 6,
+        reach: "96M",
+        ave: "2,1M€"
+      },
+      topRetombees: [
+        { media: "TotalEnergies.com", titre: "TotalEnergies acquiert 33,33% de PEL 104 (Namibie)", tonalite: "🟢", reach: "n/a" },
+        { media: "Bloomberg", titre: "TotalEnergies expands offshore presence in Namibia", tonalite: "🟢", reach: "32M" },
+        { media: "TotalEnergies.com", titre: "Strategic MoU with Kuwait Petroleum Corporation", tonalite: "🟢", reach: "n/a" },
+        { media: "Financial Times", titre: "Oil plunges then rebounds on tariff threats", tonalite: "🟠", reach: "21M" },
+        { media: "Barron's", titre: "Oil prices rise on US-Iran pressure", tonalite: "🟠", reach: "12M" },
+      ],
+      messagesPerces: ["Renforcement portefeuille exploration", "Partenariat stratégique KPC", "Discipline stratégique court/long terme"],
+      messagesNonPerces: ["Trajectoire climat long terme", "Bénéfices opérationnels immédiats", "Cadre de gestion du risque ONG"]
+    };
+
+    // ========== INTELLIGENCE CARDS CONFIG ==========
+    const intelligenceCards = [
+      { id: "prediction", code: "INT-01", emoji: "🔮", title: "Prédiction 48h", description: "5 scénarios probabilisés", metric: "5 actifs", color: "violet" },
+      { id: "alert", code: "INT-02", emoji: "🚨", title: "Alerte Crise", description: "Surveillance temps réel", metric: "2 CRITIQUES", color: "red" },
+      { id: "qa", code: "INT-03", emoji: "💬", title: "Q&A TotalEnergies", description: "Réponses porte-parole", metric: "12 fiches", color: "violet" },
+      { id: "matrix", code: "INT-04", emoji: "⚖️", title: "Matrice Risque/Opp", description: "Scoring automatique", metric: "8 sujets", color: "violet" },
+      { id: "social", code: "INT-05", emoji: "📱", title: "Écho Social", description: "Buzz & sentiment", metric: "+245%", color: "emerald" },
+      { id: "ong", code: "INT-06", emoji: "🎯", title: "Narratif Adverse", description: "Campagnes ONG décryptées", metric: "4 actives", color: "red" },
+      { id: "onepager", code: "INT-07", emoji: "📄", title: "Brief Exécutif", description: "One-pager Pouyanné", metric: "Ready", color: "violet" },
+      { id: "elite", code: "INT-08", emoji: "🎓", title: "Opinion Élite", description: "Dicible / risque / radioactif", metric: "Thermomètre", color: "blue" },
+      { id: "windows", code: "INT-09", emoji: "⏰", title: "Fenêtres de Parole", description: "Parler / se taire / laisser faire", metric: "Hebdo", color: "orange" },
+      { id: "politics", code: "INT-10", emoji: "🏛️", title: "Lecture Politique", description: "Média → politique → régulation", metric: "5 sujets", color: "indigo" },
+      { id: "cred", code: "INT-11", emoji: "📊", title: "Crédibilité Corporate", description: "Audit narratifs clés", metric: "5 thèmes", color: "emerald" },
+      { id: "narratives", code: "INT-12", emoji: "💎", title: "Narratifs Dormants", description: "Top récits favorables", metric: "Top 5", color: "yellow" },
+      { id: "saturation", code: "INT-13", emoji: "📉", title: "Saturation Médiatique", description: "Fatigue médiatique par sujet", metric: "Indice", color: "slate" },
+    ];
+
+    // ========== OUTILS CARDS CONFIG ==========
+    const outilsCards = [
+      { id: "ceo", code: "OUT-01", emoji: "📰", title: "Brief CEO Hebdo", description: "Brief prêt pour Paul/Pouyanné", buttonText: "Générer Brief", color: "indigo" },
+      { id: "geopolitique", code: "OUT-02", emoji: "🌍", title: "Veille Géopolitique", description: "Dossier complet par sujet", buttonText: "Créer Dossier", color: "violet" },
+      { id: "energy", code: "OUT-03", emoji: "⚡", title: "Energy News Briefing", description: "Briefing COMEX 6h30", buttonText: "Générer Briefing", color: "green" },
+      { id: "mail", code: "OUT-04", emoji: "📧", title: "Mail Comex", description: "Email Outlook formaté", buttonText: "Créer Email", color: "orange" },
+      { id: "pdf", code: "OUT-05", emoji: "📤", title: "Export PDF", description: "Dashboard complet en PDF", buttonText: "Exporter PDF", color: "slate" },
+      { id: "whatsapp", code: "OUT-06", emoji: "💬", title: "Envoyer WhatsApp", description: "Brief format mobile", buttonText: "Copier Brief", color: "green" },
+      { id: "historique", code: "OUT-07", emoji: "🗂️", title: "Historique Complet", description: "Archive tous les briefs", buttonText: "Voir Archive", color: "slate" },
+      { id: "journalistes", code: "OUT-08", emoji: "👤", title: "Cartographie Journalistes", description: "Fichier journalistes énergie", buttonText: "Voir Carto", color: "blue" },
+      { id: "edito", code: "OUT-09", emoji: "📝", title: "Briefing Édito Quotidien", description: "Unes + éditos WhatsApp", buttonText: "Générer Briefing", color: "violet" },
+      { id: "retombees", code: "OUT-10", emoji: "📊", title: "Retombées CP", description: "KPI après communiqué", buttonText: "Voir Retombées", color: "emerald" },
+    ];
+
+    // ========== LIVE DATA SOURCES ==========
+    const LIVE_REFRESH_MS = 2 * 60 * 1000;
+    // Note: en attendant les API prestataires (Unicepta/Tagaday/AFP),
+    // on maximise la couverture via RSS publics + requêtes Google News ciblées.
+    const MENTION_SOURCES = [
+      { name: "Google News TotalEnergies (Global)", url: "https://news.google.com/rss/search?q=TotalEnergies&hl=en&gl=US&ceid=US:en", country: "🔍" },
+      { name: "Google News TotalEnergies (FR)", url: "https://news.google.com/rss/search?q=TotalEnergies&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News TotalEnergies (EN)", url: "https://news.google.com/rss/search?q=%22TotalEnergies%22&hl=en-GB&gl=GB&ceid=GB:en", country: "🇬🇧" },
+      { name: "Google News TotalEnergies + Reuters", url: "https://news.google.com/rss/search?q=TotalEnergies+Reuters&hl=en&gl=US&ceid=US:en", country: "🌍" },
+      { name: "Google News TotalEnergies + Bloomberg", url: "https://news.google.com/rss/search?q=TotalEnergies+Bloomberg&hl=en&gl=US&ceid=US:en", country: "🌍" },
+      { name: "Google News TotalEnergies + Financial Times", url: "https://news.google.com/rss/search?q=TotalEnergies+\"Financial+Times\"&hl=en&gl=US&ceid=US:en", country: "🌍" },
+      { name: "Google News TotalEnergies + Le Monde", url: "https://news.google.com/rss/search?q=TotalEnergies+Le+Monde&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News TotalEnergies + Les Echos", url: "https://news.google.com/rss/search?q=TotalEnergies+Les+Echos&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News TotalEnergies + Figaro", url: "https://news.google.com/rss/search?q=TotalEnergies+Figaro&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News TotalEnergies + Franceinfo", url: "https://news.google.com/rss/search?q=TotalEnergies+Franceinfo&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News TotalEnergies + LNG", url: "https://news.google.com/rss/search?q=TotalEnergies+LNG&hl=en&gl=US&ceid=US:en", country: "🛢️" },
+      { name: "Google News TotalEnergies + Namibia", url: "https://news.google.com/rss/search?q=TotalEnergies+Namibia&hl=en&gl=US&ceid=US:en", country: "🇳🇦" },
+      { name: "Google News TotalEnergies + KPC", url: "https://news.google.com/rss/search?q=TotalEnergies+KPC&hl=en&gl=US&ceid=US:en", country: "🇰🇼" },
+      { name: "Google News TotalEnergies + OPEC", url: "https://news.google.com/rss/search?q=TotalEnergies+OPEC&hl=en&gl=US&ceid=US:en", country: "🛢️" },
+      { name: "Google News TotalEnergies + renewables", url: "https://news.google.com/rss/search?q=TotalEnergies+renewable+PPA&hl=en&gl=US&ceid=US:en", country: "🌱" },
+      { name: "Google News TotalEnergies + Climate", url: "https://news.google.com/rss/search?q=TotalEnergies+climate+lawsuit&hl=en&gl=US&ceid=US:en", country: "🌍" },
+      { name: "Google News TotalEnergies + Politics", url: "https://news.google.com/rss/search?q=TotalEnergies+parliament+regulation&hl=en&gl=US&ceid=US:en", country: "🏛️" },
+      { name: "Google News TotalEnergies + Mozambique LNG", url: "https://news.google.com/rss/search?q=TotalEnergies+Mozambique+LNG&hl=fr&gl=FR&ceid=FR:fr", country: "🇲🇿" },
+      { name: "Google News TotalEnergies + PEL104 Namibie", url: "https://news.google.com/rss/search?q=TotalEnergies+PEL104+Namibie&hl=fr&gl=FR&ceid=FR:fr", country: "🇳🇦" },
+      { name: "Google News TotalEnergies + Les Echos", url: "https://news.google.com/rss/search?q=TotalEnergies+\"Les+Echos\"+Namibie&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News TotalEnergies + Zonebourse", url: "https://news.google.com/rss/search?q=TotalEnergies+Zonebourse&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News TotalEnergies + L'Usine Nouvelle", url: "https://news.google.com/rss/search?q=TotalEnergies+\"Usine+Nouvelle\"&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News TotalEnergies + Mediapart", url: "https://news.google.com/rss/search?q=TotalEnergies+Mediapart&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News TotalEnergies + Humanite", url: "https://news.google.com/rss/search?q=TotalEnergies+Humanite+greenwashing&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News TotalEnergies + Investing France", url: "https://news.google.com/rss/search?q=TotalEnergies+Investing.com+France&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News TotalEnergies + BFM Bourse", url: "https://news.google.com/rss/search?q=TotalEnergies+\"BFM+Bourse\"&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News TotalEnergies + Sportune", url: "https://news.google.com/rss/search?q=Team+TotalEnergies+Sportune&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+    ];
+    const CONTEXT_SOURCES = [
+      { name: "Le Monde - Une", url: "https://www.lemonde.fr/rss/une.xml", country: "🇫🇷" },
+      { name: "Le Monde - Économie", url: "https://www.lemonde.fr/economie/rss_full.xml", country: "🇫🇷" },
+      { name: "Le Monde - International", url: "https://www.lemonde.fr/international/rss_full.xml", country: "🌍" },
+      { name: "Les Echos - Une", url: "https://www.lesechos.fr/rss/rss_une.xml", country: "🇫🇷" },
+      { name: "Le Figaro - Actualités", url: "https://www.lefigaro.fr/rss/figaro_actualites.xml", country: "🇫🇷" },
+      { name: "Franceinfo - Titres", url: "https://www.francetvinfo.fr/titres.rss", country: "🇫🇷" },
+      { name: "Le Parisien - A la une", url: "https://feeds.leparisien.fr/leparisien/rss", country: "🇫🇷" },
+      { name: "Libération - Flux général", url: "https://www.liberation.fr/arc/outboundfeeds/rss-all/?outputType=xml", country: "🇫🇷" },
+      { name: "Public Sénat", url: "https://www.publicsenat.fr/feed", country: "🇫🇷" },
+      { name: "Reuters Business", url: "https://feeds.reuters.com/reuters/businessNews", country: "🌍" },
+      { name: "Reuters World", url: "https://feeds.reuters.com/Reuters/worldNews", country: "🌍" },
+      { name: "Associated Press", url: "https://apnews.com/hub/ap-top-news?output=1", country: "🇺🇸" },
+      { name: "BBC World", url: "https://feeds.bbci.co.uk/news/world/rss.xml", country: "🌍" },
+      { name: "BBC Business", url: "https://feeds.bbci.co.uk/news/business/rss.xml", country: "🇬🇧" },
+      { name: "The Guardian Business", url: "https://www.theguardian.com/uk/business/rss", country: "🇬🇧" },
+      { name: "The Guardian World", url: "https://www.theguardian.com/world/rss", country: "🌍" },
+      { name: "NPR World", url: "https://feeds.npr.org/1004/rss.xml", country: "🌍" },
+      { name: "Al Jazeera", url: "https://www.aljazeera.com/xml/rss/all.xml", country: "🌍" },
+      { name: "CNBC Top", url: "https://www.cnbc.com/id/100003114/device/rss/rss.html", country: "🇺🇸" },
+      { name: "Yahoo Finance", url: "https://finance.yahoo.com/news/rssindex", country: "🇺🇸" },
+      { name: "OilPrice", url: "https://oilprice.com/rss/main", country: "🛢️" },
+      { name: "Energy Voice", url: "https://www.energyvoice.com/feed/", country: "🛢️" },
+      { name: "Offshore Energy", url: "https://www.offshore-energy.biz/feed/", country: "🛢️" },
+      { name: "World Oil", url: "https://www.worldoil.com/feed", country: "🛢️" },
+      { name: "Rigzone", url: "https://www.rigzone.com/rss/news.aspx", country: "🛢️" },
+      { name: "Montel News", url: "https://www.montelnews.com/rss", country: "🛢️" },
+      { name: "Euronews", url: "https://www.euronews.com/rss?level=theme&name=news", country: "🇪🇺" },
+      { name: "Politico Europe", url: "https://www.politico.eu/feed/", country: "🇪🇺" },
+      { name: "Euractiv", url: "https://www.euractiv.com/feed/", country: "🇪🇺" },
+      { name: "Google News Geopolitics", url: "https://news.google.com/rss/search?q=geopolitics+energy+oil+gas&hl=en&gl=US&ceid=US:en", country: "🌍" },
+      { name: "Google News Monde", url: "https://news.google.com/rss/search?q=geopolitique+monde&hl=fr&gl=FR&ceid=FR:fr", country: "🌍" },
+      { name: "Google News Politique FR", url: "https://news.google.com/rss/search?q=politique+france&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News Économie FR", url: "https://news.google.com/rss/search?q=economie+conjoncture&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News Europe Policy", url: "https://news.google.com/rss/search?q=europe+energy+regulation&hl=en&gl=US&ceid=US:en", country: "🇪🇺" },
+      { name: "Google News US Policy", url: "https://news.google.com/rss/search?q=us+energy+policy+congress&hl=en&gl=US&ceid=US:en", country: "🇺🇸" },
+      { name: "Google News Elections", url: "https://news.google.com/rss/search?q=elections+energy+policy&hl=en&gl=US&ceid=US:en", country: "🗳️" },
+      { name: "Google News Inflation", url: "https://news.google.com/rss/search?q=inflation+rates+economic+outlook&hl=en&gl=US&ceid=US:en", country: "💹" },
+      { name: "Google News OPEC", url: "https://news.google.com/rss/search?q=OPEC+oil+prices&hl=en&gl=US&ceid=US:en", country: "🛢️" },
+      { name: "Google News LNG", url: "https://news.google.com/rss/search?q=LNG+market+energy&hl=en&gl=US&ceid=US:en", country: "🛢️" },
+      { name: "Google News Energy Policy", url: "https://news.google.com/rss/search?q=energy+policy+europe+us&hl=en&gl=US&ceid=US:en", country: "🌍" },
+      { name: "Google News TotalEnergies Context", url: "https://news.google.com/rss/search?q=TotalEnergies+strategy+markets&hl=en&gl=US&ceid=US:en", country: "🔍" },
+      { name: "Google News Hydrogène FR", url: "https://news.google.com/rss/search?q=hydrogene+vert+industrie+france&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News Hydrogen Global", url: "https://news.google.com/rss/search?q=green+hydrogen+industry+policy&hl=en&gl=US&ceid=US:en", country: "🌍" },
+      { name: "Google News Transition Energétique", url: "https://news.google.com/rss/search?q=transition+energetique+industrie+europe&hl=fr&gl=FR&ceid=FR:fr", country: "🇪🇺" },
+      { name: "Google News ESG Controverses", url: "https://news.google.com/rss/search?q=ESG+controversy+greenwashing+CAC+40&hl=en&gl=US&ceid=US:en", country: "🌍" },
+      { name: "Google News Marches Energie FR", url: "https://news.google.com/rss/search?q=petrole+bourse+totalenergies+les+echos&hl=fr&gl=FR&ceid=FR:fr", country: "🇫🇷" },
+      { name: "Google News Mozambique LNG", url: "https://news.google.com/rss/search?q=Mozambique+LNG+TotalEnergies+project+restart&hl=en&gl=US&ceid=US:en", country: "🇲🇿" },
+      { name: "Google News Namibie Exploration", url: "https://news.google.com/rss/search?q=Namibia+PEL104+offshore+exploration&hl=en&gl=US&ceid=US:en", country: "🇳🇦" },
+    ];
+
+    const MENTIONS_FALLBACK_ITEMS = mentionsData.map((m) => ({
+      id: `fallback-${m.id}`,
+      title: m.title,
+      summary: m.excerpt,
+      publishedAt: new Date().toISOString(),
+      source: m.source,
+      feedTitle: m.source,
+      country: m.country || "🌍",
+      link: m.source_url || "",
+    }));
+    const CONTEXT_FALLBACK_ITEMS = [
+      ...topCoveragesData.map((a, i) => ({
+        id: `ctx-cover-${i}`,
+        title: a.title,
+        summary: a.excerpt,
+        publishedAt: new Date().toISOString(),
+        source: a.source,
+        feedTitle: a.source,
+        country: "🌍",
+        link: "",
+      })),
+      ...geopoliticsData.map((g, i) => ({
+        id: `ctx-geo-${i}`,
+        title: g.title,
+        summary: g.context,
+        publishedAt: new Date().toISOString(),
+        source: "Geopolitics",
+        feedTitle: "Geopolitics",
+        country: g.emoji || "🌍",
+        link: "",
+      })),
+    ];
+
+    function cleanText(v = "") {
+      return String(v).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+    }
+
+    function parseFeedXml(xmlText, sourceMeta) {
+      const doc = new DOMParser().parseFromString(xmlText, "text/xml");
+      const parseItem = (node, atom = false) => {
+        const get = (sel) => node.querySelector(sel)?.textContent?.trim() || "";
+        const title = get("title");
+        const summary = get("description") || get("summary") || get("content");
+        const publishedAt = get("pubDate") || get("published") || get("updated");
+        let link = "";
+        if (atom) {
+          link = node.querySelector("link[rel='alternate']")?.getAttribute("href")
+            || node.querySelector("link")?.getAttribute("href")
+            || "";
+        } else {
+          link = get("link");
+        }
+        return {
+          id: link || `${sourceMeta.name}-${title}`,
+          title,
+          summary: cleanText(summary),
+          publishedAt,
+          source: sourceMeta.name,
+          feedTitle: sourceMeta.name,
+          country: sourceMeta.country || "🌍",
+          link,
+        };
+      };
+
+      const rssItems = Array.from(doc.querySelectorAll("rss channel item")).map((n) => parseItem(n, false));
+      if (rssItems.length) return rssItems;
+      return Array.from(doc.querySelectorAll("feed entry")).map((n) => parseItem(n, true));
+    }
+
+    function parseDateSafe(input) {
+      if (!input) return new Date(); // pas de date = on considère "maintenant"
+      const d = new Date(input);
+      return Number.isNaN(d.getTime()) ? new Date() : d;
+    }
+
+    function normalizeTitle(text = "") {
+      return cleanText(text)
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}\s]/gu, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function canonicalLink(raw = "") {
+      if (!raw) return "";
+      try {
+        const u = new URL(raw);
+        const keep = ["id", "article", "story"];
+        const params = new URLSearchParams();
+        for (const k of keep) {
+          if (u.searchParams.get(k)) params.set(k, u.searchParams.get(k));
+        }
+        const search = params.toString();
+        return `${u.origin}${u.pathname}${search ? `?${search}` : ""}`.toLowerCase();
+      } catch {
+        return cleanText(raw).toLowerCase();
+      }
+    }
+
+    function dedupKey(item) {
+      return canonicalLink(item.link || "") || normalizeTitle(item.title || "");
+    }
+
+    function formatAbsoluteDate(d) {
+      return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" });
+    }
+
+    function formatAge(ts) {
+      if (!ts) return "n/a";
+      const diff = Math.max(0, Date.now() - ts);
+      const min = Math.floor(diff / 60000);
+      if (min < 1) return "à l'instant";
+      if (min < 60) return `il y a ${min} min`;
+      const h = Math.floor(min / 60);
+      return `il y a ${h} h`;
+    }
+
+    function classifySentiment(text) {
+      const t = text.toLowerCase();
+      if (/(lawsuit|probe|risk|crisis|fall|drop|attack|war|sanction|critique|plainte|crise|chute|baisse)/.test(t)) return "critical";
+      if (/(deal|agreement|acquire|growth|rebound|sign|partnership|award|record|mo u|mou|contrat|accord|hausse)/.test(t)) return "positive";
+      return "neutral";
+    }
+
+    function isTTERelevant(item) {
+      const blob = `${item.title || ""} ${item.summary || ""} ${item.link || ""} ${item.feedTitle || ""}`.toLowerCase();
+      const strong = /(totalenergies|total energies|tte\.pa|nyse:tte|euronext:tte)/.test(blob);
+      const medium = /(patrick pouyann|pouyanné|tilenga|eacop|mozambique l(n)?g|namibia|pel 104|kuwait petroleum|kpc)/.test(blob);
+      return strong || medium;
+    }
+
+    function isContextRelevant(item) {
+      const blob = `${item.title || ""} ${item.summary || ""} ${item.link || ""} ${item.feedTitle || ""}`.toLowerCase();
+      return /(energy|oil|gas|lng|opec|brent|wti|inflation|recession|tariff|sanction|election|parliament|regulation|geopolit|middle east|iran|ukraine|climate|renewable|hydrogen|hydrogene|h2|esg|greenwashing|controvers|conjoncture|politique|macro|économie|economie|marché|marche|transition|decarbon|cac 40)/.test(blob);
+    }
+
+    function isHighSignalContext(item) {
+      const blob = `${item.title || ""} ${item.summary || ""}`.toLowerCase();
+      const strongTopic = /(totalenergies|mozambique|namibia|pel ?104|esg|greenwashing|hydrogen|hydrogene|transition|opec|brent|wti|inflation|recession|geopolit|iran|ukraine|regulation|policy)/.test(blob);
+      return (blob.length > 40 || strongTopic) && !/(celebrity|people\.com|gossip|tv show)/.test(blob);
+    }
+
+    function toPriority(sentiment, idx) {
+      if (idx < 2) return "🔴 Haute";
+      if (sentiment === "critical") return "🔴 Haute";
+      if (idx < 5) return "🟠 Moyenne";
+      return "🟢 Basse";
+    }
+
+    function buildHotTopics(items) {
+      return items.slice(0, 5).map((item, idx) => {
+        const text = `${item.title || ""} ${item.summary || ""}`.toLowerCase();
+        const sentiment = classifySentiment(text);
+        return {
+          id: idx + 1,
+          emoji: item.country || "🌍",
+          title: (item.title || "Sujet énergie").slice(0, 64),
+          subtitle: item.feedTitle || item.source || "Veille live",
+          brief: `<strong>${item.publishedAt ? formatAbsoluteDate(parseDateSafe(item.publishedAt) || new Date()) : "Date n/a"}</strong> : ${cleanText(item.summary || item.title || "Mise à jour en cours").slice(0, 180)}.`,
+          actions: [
+            "Mettre à jour les éléments de langage",
+            "Suivre la couverture internationale 24h",
+            "Qualifier les risques réputationnels",
+            "Préparer une réponse dirigeant si escalade"
+          ],
+          impact: idx < 2 || sentiment === "critical" ? "🔥 Critique" : idx < 4 ? "Élevé" : "Moyen",
+          status: idx < 3 ? "🔥 Chaud" : "👁️ Surveiller",
+          nature: sentiment,
+        };
+      });
+    }
+
+    function buildWeakSignals(items) {
+      return items.slice(0, 8).map((item, idx) => {
+        const sentiment = classifySentiment(`${item.title} ${item.summary}`);
+        return {
+          emoji: item.country || "🌍",
+          signal: cleanText(item.title || "Signal détecté").slice(0, 72),
+          context: cleanText(item.summary || item.title || "").slice(0, 220),
+          horizon: idx < 2 ? "Immédiat" : idx < 5 ? "2-7 jours" : "2-4 semaines",
+          impact: idx < 2 || sentiment === "critical" ? "🔥 Critique" : idx < 5 ? "Élevé" : "Moyen",
+          nature: sentiment,
+        };
+      });
+    }
+
+    function buildTopCoverages(items) {
+      return items.slice(0, 4).map((item, idx) => ({
+        id: idx + 1,
+        source: (item.feedTitle || item.source || "Source").toUpperCase(),
+        tag: item.country || "🌍",
+        title: cleanText(item.title || "").slice(0, 100),
+        excerpt: cleanText(item.summary || item.title || "").slice(0, 160),
+        critical: idx < 2 || classifySentiment(`${item.title} ${item.summary}`) === "critical",
+      }));
+    }
+
+    function buildPredictionScenarios(items) {
+      return items.slice(0, 5).map((item, idx) => ({
+        title: cleanText(item.title || "Scénario").slice(0, 84),
+        probability: Math.max(50, 86 - idx * 8),
+        trigger: item.feedTitle || item.source || "Veille live",
+        action: idx < 2 ? "Activer Q&A et monitoring rapproché" : "Maintenir veille renforcée et préparation de prise de parole",
+      }));
+    }
+
+    function contextTheme(item) {
+      const blob = `${item.title || ""} ${item.summary || ""}`.toLowerCase();
+      if (/(election|parliament|congress|government|regulation|sanction|policy|politique)/.test(blob)) return "politique";
+      if (/(inflation|recession|gdp|growth|rates|conjoncture|macro|économie|economie)/.test(blob)) return "macro";
+      if (/(iran|ukraine|middle east|china|russia|geopolit|diplom)/.test(blob)) return "geopolitique";
+      if (/(opec|brent|wti|oil|gas|lng|offshore|refining|upstream|downstream)/.test(blob)) return "energie";
+      if (/(climate|renewable|transition|emissions|cop|decarbon)/.test(blob)) return "climat";
+      if (/(hydrogen|hydrogene|h2|electrolyser|electrolyseur|fuel cell)/.test(blob)) return "hydrogene";
+      if (/(esg|greenwashing|controvers|lawsuit|tribunal|proc[eè]s|mediapart)/.test(blob)) return "esg";
+      if (/(bourse|market|stocks|actions|investing|finance|yield|bond)/.test(blob)) return "finance";
+      return "general";
+    }
+
+    function scoreContextItem(item, nowTs) {
+      const ts = parseDateSafe(item.publishedAt)?.getTime() || 0;
+      const ageHours = Math.max(0, (nowTs - ts) / (1000 * 60 * 60));
+      const recency = Math.max(0, 100 - Math.min(96, ageHours));
+      const theme = contextTheme(item);
+      const themeBonus = theme === "geopolitique" || theme === "macro" || theme === "politique" ? 12 : theme === "energie" ? 8 : 4;
+      const ttePenalty = isTTERelevant(item) ? -4 : 0;
+      return recency + themeBonus + ttePenalty;
+    }
+
+    function buildDiversifiedContext(items, limit = 60, constraints = { tteRatioMax: 0.2, minThemesTop12: 5, maxPerSourceTop12: 2 }) {
+      const nowTs = Date.now();
+      const ranked = [...items]
+        .map((item) => ({ item, score: scoreContextItem(item, nowTs), ts: parseDateSafe(item.publishedAt)?.getTime() || 0 }))
+        .sort((a, b) => (b.score - a.score) || (b.ts - a.ts) || normalizeTitle(a.item.title).localeCompare(normalizeTitle(b.item.title)))
+        .map((x) => x.item);
+
+      const selected = [];
+      const usedKeys = new Set();
+      const srcTop12 = new Map();
+      const themeTop12 = new Map();
+      const preferredThemes = ["geopolitique", "macro", "politique", "energie", "climat", "hydrogene", "esg", "finance"];
+      const topWindow = Math.min(12, limit);
+      const tteCapTop = Math.max(1, Math.floor(topWindow * constraints.tteRatioMax));
+      const tteCapTop4 = 1;
+      let tteTopCount = 0;
+      let tteTop4Count = 0;
+
+      const canPickTop = (item) => {
+        const key = dedupKey(item);
+        if (!key || usedKeys.has(key)) return false;
+        const src = item.feedTitle || item.source || "Source";
+        const theme = contextTheme(item);
+        const tte = isTTERelevant(item);
+        if (tte && tteTopCount >= tteCapTop) return false;
+        if (tte && selected.length < 4 && tteTop4Count >= tteCapTop4) return false;
+        if ((srcTop12.get(src) || 0) >= constraints.maxPerSourceTop12) return false;
+        if ((themeTop12.get(theme) || 0) >= 5) return false;
+        return true;
+      };
+
+      const pickTop = (item) => {
+        const key = dedupKey(item);
+        const src = item.feedTitle || item.source || "Source";
+        const theme = contextTheme(item);
+        selected.push(item);
+        usedKeys.add(key);
+        srcTop12.set(src, (srcTop12.get(src) || 0) + 1);
+        themeTop12.set(theme, (themeTop12.get(theme) || 0) + 1);
+        if (isTTERelevant(item)) {
+          tteTopCount += 1;
+          if (selected.length <= 4) tteTop4Count += 1;
+        }
+      };
+
+      // Seed top 12 with theme diversity first.
+      for (const theme of preferredThemes) {
+        if (selected.length >= topWindow) break;
+        const candidate = ranked.find((it) => contextTheme(it) === theme && !isTTERelevant(it) && canPickTop(it));
+        if (candidate) pickTop(candidate);
+      }
+
+      // Fill top 12 respecting quotas/caps.
+      for (const item of ranked) {
+        if (selected.length >= topWindow) break;
+        if (!canPickTop(item)) continue;
+        pickTop(item);
+      }
+
+      // Guarantee minimum theme diversity in top 12.
+      const distinctThemes = new Set(selected.slice(0, topWindow).map((it) => contextTheme(it)));
+      if (distinctThemes.size < constraints.minThemesTop12) {
+        for (const item of ranked) {
+          if (selected.length >= topWindow) break;
+          const theme = contextTheme(item);
+          if (distinctThemes.has(theme)) continue;
+          if (!canPickTop(item)) continue;
+          pickTop(item);
+          distinctThemes.add(theme);
+          if (distinctThemes.size >= constraints.minThemesTop12) break;
+        }
+      }
+
+      // Force top 4 à couvrir >=2 thèmes non-TTE.
+      const top4 = selected.slice(0, Math.min(4, selected.length));
+      const top4NonTteThemes = new Set(top4.filter((it) => !isTTERelevant(it)).map((it) => contextTheme(it)));
+      if (top4.length >= 3 && top4NonTteThemes.size < 2) {
+        const replacement = ranked.find((it) => {
+          const key = dedupKey(it);
+          if (!key || usedKeys.has(key)) return false;
+          if (isTTERelevant(it)) return false;
+          return !top4NonTteThemes.has(contextTheme(it));
+        });
+        if (replacement) {
+          let replaceIdx = selected.slice(0, 4).findIndex((it) => isTTERelevant(it));
+          if (replaceIdx < 0) {
+            const dupTheme = selected
+              .slice(0, 4)
+              .map((it, idx) => ({ idx, theme: contextTheme(it), tte: isTTERelevant(it) }))
+              .find((x, _, arr) => arr.some((y) => y.idx !== x.idx && y.theme === x.theme && !x.tte && !y.tte));
+            replaceIdx = dupTheme ? dupTheme.idx : 3;
+          }
+          if (replaceIdx >= 0 && replaceIdx < selected.length) {
+            const removed = selected[replaceIdx];
+            const removedKey = dedupKey(removed);
+            selected[replaceIdx] = replacement;
+            usedKeys.add(dedupKey(replacement));
+            if (removedKey) usedKeys.delete(removedKey);
+          }
+        }
+      }
+
+      // Fill remaining slots with looser caps but keep global 20% TTE.
+      let globalTte = selected.filter((it) => isTTERelevant(it)).length;
+      const globalTteCap = Math.max(1, Math.floor(limit * constraints.tteRatioMax));
+      const srcAll = new Map();
+      selected.forEach((it) => {
+        const src = it.feedTitle || it.source || "Source";
+        srcAll.set(src, (srcAll.get(src) || 0) + 1);
+      });
+
+      for (const item of ranked) {
+        if (selected.length >= limit) break;
+        const key = dedupKey(item);
+        if (!key || usedKeys.has(key)) continue;
+        const src = item.feedTitle || item.source || "Source";
+        if ((srcAll.get(src) || 0) >= 3) continue;
+        if (isTTERelevant(item) && globalTte >= globalTteCap) continue;
+        selected.push(item);
+        usedKeys.add(key);
+        srcAll.set(src, (srcAll.get(src) || 0) + 1);
+        if (isTTERelevant(item)) globalTte += 1;
+      }
+
+      if (selected.length < limit) {
+        for (const item of ranked) {
+          if (selected.length >= limit) break;
+          const key = dedupKey(item);
+          if (!key || usedKeys.has(key)) continue;
+          selected.push(item);
+          usedKeys.add(key);
+        }
+      }
+      return selected;
+    }
+
+    function computeContextMixStats(items) {
+      const total = items.length || 1;
+      const tte = items.filter((i) => isTTERelevant(i)).length;
+      const nonTte = Math.max(0, items.length - tte);
+      const ttePct = Math.round((tte / total) * 100);
+      const nonTtePct = Math.max(0, 100 - ttePct);
+      const top12 = items.slice(0, 12);
+      const themesTop12 = Array.from(new Set(top12.map((i) => contextTheme(i))));
+      const byTheme = {};
+      top12.forEach((i) => {
+        const t = contextTheme(i);
+        byTheme[t] = (byTheme[t] || 0) + 1;
+      });
+      return { tte, nonTte, ttePct, nonTtePct, themesTop12, byTheme };
+    }
+
+    async function fetchFeed(source) {
+      const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(source.url)}`;
+      const res = await fetch(proxy, { cache: "no-store" });
+      if (!res.ok) return [];
+      const xml = await res.text();
+      return parseFeedXml(xml, source);
+    }
+
+    async function fetchQuote(symbol) {
+      const endpoint = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=5d`;
+      const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(endpoint)}`;
+      const res = await fetch(proxy, { cache: "no-store" });
+      if (!res.ok) return null;
+      const data = await res.json();
+      const meta = data?.chart?.result?.[0]?.meta;
+      if (!meta?.regularMarketPrice) return null;
+      const price = Number(meta.regularMarketPrice);
+      const prev = Number(meta.previousClose || meta.chartPreviousClose || price);
+      const pct = prev ? ((price - prev) / prev) * 100 : 0;
+      return { price, pct };
+    }
+
+    function formatQuote(q, currency = "", decimals = 2) {
+      if (!q) return { price: "n/a", change: "n/a" };
+      const sign = q.pct >= 0 ? "+" : "";
+      return { price: `${q.price.toFixed(decimals)}${currency}`, change: `${sign}${q.pct.toFixed(2)}%` };
+    }
+
+    // ========== COMPONENTS ==========
+    const ImpactBadge = ({ impact }) => {
+      const colors = { "Critique": "bg-red-500/20 text-red-400", "🔥 Critique": "bg-red-500/20 text-red-400", "Élevé": "bg-orange-500/20 text-orange-400", "Moyen": "bg-yellow-500/20 text-yellow-400" };
+      return <span className={`px-2 py-1 text-xs font-medium rounded ${colors[impact] || "bg-slate-500/20 text-slate-400"}`}>{impact}</span>;
+    };
+
+    const StatusBadge = ({ status }) => {
+      const colors = { "🔥 Chaud": "bg-red-500/20 text-red-400", "📋 Prêt": "bg-blue-500/20 text-blue-400", "✅ Géré": "bg-emerald-500/20 text-emerald-400", "👁️ Surveiller": "bg-yellow-500/20 text-yellow-400" };
+      return <span className={`px-2 py-1 text-xs font-medium rounded ${colors[status] || "bg-slate-500/20 text-slate-400"}`}>{status}</span>;
+    };
+
+    const PriorityBadge = ({ priority }) => {
+      const colors = { "🔴 Haute": "bg-red-500/20 text-red-400", "🟠 Moyenne": "bg-orange-500/20 text-orange-400", "🟢 Basse": "bg-emerald-500/20 text-emerald-400" };
+      return <span className={`px-2 py-1 text-xs font-medium rounded ${colors[priority] || "bg-slate-500/20 text-slate-400"}`}>{priority}</span>;
+    };
+
+    const Modal = ({ isOpen, onClose, title, children, wide }) => {
+      if (!isOpen) return null;
+      return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
+          <div className={`bg-slate-900 border border-slate-700 rounded-xl ${wide ? 'max-w-5xl' : 'max-w-2xl'} w-full max-h-[90vh] overflow-hidden shadow-2xl`} onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-4 border-b border-slate-700">
+              <h3 className="text-lg font-semibold text-white">{title}</h3>
+              <button onClick={onClose} className="p-1 text-slate-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <div className="p-4 overflow-y-auto max-h-[calc(90vh-60px)] scrollbar-thin">{children}</div>
+          </div>
+        </div>
+      );
+    };
+
+    const MentionCard = ({ mention, onClick }) => {
+      const borderColors = { critical: "border-l-red-500", positive: "border-l-emerald-500", neutral: "border-l-slate-500" };
+      const bgColors = { critical: "bg-red-500/5", positive: "bg-emerald-500/5", neutral: "bg-slate-800/50" };
+      return (
+        <div className={`${bgColors[mention.sentiment]} border border-slate-700 border-l-4 ${borderColors[mention.sentiment]} rounded-lg p-4 cursor-pointer hover:bg-slate-800/80 transition-all`} onClick={onClick}>
+          <div className="flex items-start justify-between mb-2 gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-lg">{mention.country}</span>
+              <span className="text-xs font-bold text-slate-300 uppercase">{mention.source}</span>
+              {mention.tag && <span className="px-2 py-0.5 text-xs bg-blue-500/20 text-blue-400 rounded">Géopolitique</span>}
+              <PriorityBadge priority={mention.priority} />
+            </div>
+            <span className="text-xs text-slate-500 whitespace-nowrap">{mention.time}</span>
+          </div>
+          <h4 className="font-semibold text-white mb-2">{mention.title}</h4>
+          <p className="text-sm text-slate-400 mb-3">{mention.excerpt}</p>
+          <div className={`border-l-2 ${borderColors[mention.sentiment].replace('border-l-', 'border-')} pl-3 py-1 bg-slate-800/50 rounded-r`}>
+            <p className="text-sm text-slate-300 italic">"{mention.quote}"</p>
+          </div>
+        </div>
+      );
+    };
+
+    const BriefCard = ({ emoji, title, code, color, children }) => {
+      const colorMap = { red: "from-red-500/20 to-red-600/5 border-red-500/30", blue: "from-blue-500/20 to-blue-600/5 border-blue-500/30", orange: "from-orange-500/20 to-orange-600/5 border-orange-500/30", green: "from-emerald-500/20 to-emerald-600/5 border-emerald-500/30" };
+      const titleColors = { red: "text-red-400", blue: "text-blue-400", orange: "text-orange-400", green: "text-emerald-400" };
+      return (
+        <div className={`bg-gradient-to-br ${colorMap[color]} border rounded-xl p-4`}>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">{emoji}</span>
+              <h3 className={`font-bold uppercase tracking-wider text-sm ${titleColors[color]}`}>{title}</h3>
+            </div>
+            <span className="text-[10px] text-slate-500 font-mono">{code}</span>
+          </div>
+          {children}
+        </div>
+      );
+    };
+
+    const IntelligenceCard = ({ card, onClick }) => {
+      const colorMap = {
+        violet: "from-violet-500/20 to-violet-600/5 border-violet-500/30",
+        emerald: "from-emerald-500/20 to-emerald-600/5 border-emerald-500/30",
+        red: "from-red-500/20 to-red-600/5 border-red-500/30",
+        blue: "from-blue-500/20 to-blue-600/5 border-blue-500/30",
+        orange: "from-orange-500/20 to-orange-600/5 border-orange-500/30",
+        indigo: "from-indigo-500/20 to-indigo-600/5 border-indigo-500/30",
+        yellow: "from-yellow-500/20 to-yellow-600/5 border-yellow-500/30",
+        slate: "from-slate-500/20 to-slate-600/5 border-slate-500/30",
+      };
+      const metricColors = {
+        violet: "text-violet-400",
+        emerald: "text-emerald-400",
+        red: "text-red-400",
+        blue: "text-blue-400",
+        orange: "text-orange-400",
+        indigo: "text-indigo-400",
+        yellow: "text-yellow-400",
+        slate: "text-slate-300",
+      };
+      return (
+        <div className={`bg-gradient-to-br ${colorMap[card.color]} border rounded-xl p-3 cursor-pointer transition-all hover:scale-105`} onClick={onClick}>
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-2xl">{card.emoji}</span>
+            <span className="text-[10px] text-slate-500 font-mono">{card.code}</span>
+          </div>
+          <h4 className="font-semibold text-white text-sm mb-1">{card.title}</h4>
+          <p className="text-xs text-slate-400 mb-2">{card.description}</p>
+          <div className={`text-sm font-bold ${metricColors[card.color]}`}>{card.metric}</div>
+        </div>
+      );
+    };
+
+    const ToolCard = ({ tool, onClick }) => {
+      const colorMap = { indigo: "border-indigo-500/30 hover:border-indigo-400", violet: "border-violet-500/30 hover:border-violet-400", green: "border-emerald-500/30 hover:border-emerald-400", orange: "border-orange-500/30 hover:border-orange-400", slate: "border-slate-600 hover:border-slate-500", blue: "border-blue-500/30 hover:border-blue-400", emerald: "border-emerald-500/30 hover:border-emerald-400" };
+      const btnColors = { indigo: "bg-indigo-600 hover:bg-indigo-500", violet: "bg-violet-600 hover:bg-violet-500", green: "bg-emerald-600 hover:bg-emerald-500", orange: "bg-orange-600 hover:bg-orange-500", slate: "bg-slate-600 hover:bg-slate-500", blue: "bg-blue-600 hover:bg-blue-500", emerald: "bg-emerald-600 hover:bg-emerald-500" };
+      return (
+        <div className={`bg-slate-800/50 border ${colorMap[tool.color]} rounded-xl p-4 hover:bg-slate-800 transition-all`}>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-2xl">{tool.emoji}</span>
+            <span className="text-[10px] text-slate-500 font-mono">{tool.code}</span>
+          </div>
+          <h4 className="font-semibold text-white mb-1">{tool.title}</h4>
+          <p className="text-xs text-slate-400 mb-3">{tool.description}</p>
+          <button onClick={() => onClick(tool.id)} className={`w-full py-2 px-4 rounded-lg text-sm font-medium text-white ${btnColors[tool.color]} transition-colors`}>→ {tool.buttonText}</button>
+        </div>
+      );
+    };
+
+    // ========== MAIN DASHBOARD ==========
+    function TENDashboard() {
+      const [activeSection, setActiveSection] = useState("mentions");
+      const [selectedMention, setSelectedMention] = useState(null);
+      const [selectedTopic, setSelectedTopic] = useState(null);
+      const [selectedSignal, setSelectedSignal] = useState(null);
+      const [selectedIntelligence, setSelectedIntelligence] = useState(null);
+      const [selectedOutil, setSelectedOutil] = useState(null);
+      const [showToast, setShowToast] = useState(false);
+      const [toastMessage, setToastMessage] = useState("");
+      const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+      const [mentionsItems, setMentionsItems] = useState(MENTIONS_FALLBACK_ITEMS);
+      const [contextItems, setContextItems] = useState(CONTEXT_FALLBACK_ITEMS);
+      const [trialItems, setTrialItems] = useState([]);
+      const [mentionSources, setMentionSources] = useState(["Snapshot éditorial TTE"]);
+      const [contextSources, setContextSources] = useState(["Snapshot contexte"]);
+      const [trialSources, setTrialSources] = useState([]);
+      const [lastUpdated, setLastUpdated] = useState(new Date());
+      const [liveBenchmark, setLiveBenchmark] = useState(benchmarkData);
+      const [poolFreshness, setPoolFreshness] = useState({ mentions: null, context: null });
+      const liveStateRef = useRef({ mentionsReady: false, contextReady: false, lastSuccessByPool: { mentions: null, context: null } });
+
+      const showNotification = (msg) => { setToastMessage(msg); setShowToast(true); setTimeout(() => setShowToast(false), 3000); };
+
+      useEffect(() => {
+        let isMounted = true;
+
+        const loadLive = async () => {
+          try {
+            const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+
+            // Nouvelle collecte : on s'appuie sur l'API Pages `/api/news` qui agrège déjà toutes les sources (Google News, Bing, presse énergie, ONG...).
+            const resNews = await fetch("/api/news", { cache: "no-store" });
+            const jsonNews = resNews.ok ? await resNews.json() : { items: [] };
+            const allItems = Array.isArray(jsonNews.items) ? jsonNews.items : [];
+
+            // Mentions TotalEnergies / Pouyanné
+            const mentionDedup = new Map();
+            allItems.forEach((item) => {
+              const key = dedupKey(item);
+              if (!key) return;
+              const d = parseDateSafe(item.publishedAt);
+              if (!d || d.getTime() < sevenDaysAgo) return;
+              if (!isTTERelevant(item) && !/pouyann[ée]/i.test(`${item.title} ${item.summary}`)) return;
+              if (!mentionDedup.has(key)) mentionDedup.set(key, item);
+            });
+
+            const mentionSorted = Array.from(mentionDedup.values())
+              .sort((a, b) => (parseDateSafe(b.publishedAt)?.getTime() || 0) - (parseDateSafe(a.publishedAt)?.getTime() || 0))
+              .slice(0, 120);
+
+            // Contexte large
+            const contextDedup = new Map();
+            allItems.forEach((item) => {
+              const key = dedupKey(item);
+              if (!key) return;
+              const d = parseDateSafe(item.publishedAt);
+              if (!d || d.getTime() < sevenDaysAgo) return;
+              if (!isContextRelevant(item) && !isTTERelevant(item)) return;
+              if (!isHighSignalContext(item)) return;
+              if (!contextDedup.has(key)) contextDedup.set(key, item);
+            });
+            const contextSorted = Array.from(contextDedup.values())
+              .sort((a, b) => (parseDateSafe(b.publishedAt)?.getTime() || 0) - (parseDateSafe(a.publishedAt)?.getTime() || 0))
+              .slice(0, 240);
+
+            // Trial War Room : procès climat / devoir de vigilance / ONG
+            const trialDedup = new Map();
+            const trialPattern = /(proc(è|e)s|audience|tribunal|vigilance|climat|greenwashing|sherpa|notre affaire|amnesty|fne|greenpeace|pouyann[ée]|totalenergies|tournai|belgique|falys|ong)/i;
+            allItems.forEach((item) => {
+              const key = dedupKey(item);
+              if (!key) return;
+              const d = parseDateSafe(item.publishedAt);
+              if (!d || d.getTime() < sevenDaysAgo) return;
+              const blob = `${item.title || ""} ${item.summary || ""}`.toLowerCase();
+              if (!trialPattern.test(blob)) return;
+              if (!trialDedup.has(key)) trialDedup.set(key, item);
+            });
+            const trialSorted = Array.from(trialDedup.values())
+              .sort((a, b) => (parseDateSafe(b.publishedAt)?.getTime() || 0) - (parseDateSafe(a.publishedAt)?.getTime() || 0))
+              .slice(0, 200);
+
+            if (isMounted) {
+              if (mentionSorted.length >= 1) {
+                setMentionsItems(mentionSorted);
+                setMentionSources(Array.from(new Set(mentionSorted.map((i) => i.feedTitle || i.source))).slice(0, 20));
+                liveStateRef.current.mentionsReady = true;
+                liveStateRef.current.lastSuccessByPool.mentions = Date.now();
+              } else if (!liveStateRef.current.mentionsReady) {
+                setMentionsItems(MENTIONS_FALLBACK_ITEMS);
+                setMentionSources(["Snapshot éditorial TTE"]);
+              }
+
+              if (contextSorted.length >= 1) {
+                setContextItems(contextSorted);
+                setContextSources(Array.from(new Set(contextSorted.map((i) => i.feedTitle || i.source))).slice(0, 24));
+                liveStateRef.current.contextReady = true;
+                liveStateRef.current.lastSuccessByPool.context = Date.now();
+              } else if (!liveStateRef.current.contextReady) {
+                setContextItems(CONTEXT_FALLBACK_ITEMS);
+                setContextSources(["Snapshot contexte"]);
+              }
+
+              setTrialItems(trialSorted);
+              setTrialSources(Array.from(new Set(trialSorted.map((i) => i.feedTitle || i.source))).slice(0, 24));
+              setPoolFreshness({
+                mentions: liveStateRef.current.lastSuccessByPool.mentions,
+                context: liveStateRef.current.lastSuccessByPool.context
+              });
+              setLastUpdated(new Date());
+            }
+
+            const [ttePa, tteNyse, shell, bp, chevron, brent, wti] = await Promise.all([
+              fetchQuote("TTE.PA"),
+              fetchQuote("TTE"),
+              fetchQuote("SHEL"),
+              fetchQuote("BP"),
+              fetchQuote("CVX"),
+              fetchQuote("BZ=F"),
+              fetchQuote("CL=F"),
+            ]);
+
+            if (isMounted) {
+              setLiveBenchmark({
+                tte: { ...benchmarkData.tte, ...formatQuote(ttePa, "€") },
+                tteNyse: { ...benchmarkData.tteNyse, ...formatQuote(tteNyse, "$") },
+                shell: { ...benchmarkData.shell, ...formatQuote(shell, "$") },
+                bp: { ...benchmarkData.bp, ...formatQuote(bp, "£") },
+                chevron: { ...benchmarkData.chevron, ...formatQuote(chevron, "$") },
+                brent: { ...benchmarkData.brent, ...formatQuote(brent, "$", 2) },
+                wti: { ...benchmarkData.wti, ...formatQuote(wti, "$", 2) },
+              });
+            }
+          } catch {
+            // Keep fallback data when network/RSS is unavailable.
+          }
+        };
+
+        loadLive();
+        const timer = setInterval(loadLive, LIVE_REFRESH_MS);
+        return () => {
+          isMounted = false;
+          clearInterval(timer);
+        };
+      }, []);
+
+      const mentionsDataLive = mentionsItems.slice(0, 20).map((item, idx) => {
+        const sentiment = classifySentiment(`${item.title} ${item.summary}`);
+        return {
+          id: idx + 1,
+          source: item.feedTitle || item.source || "Source",
+          country: item.country || "🌍",
+          time: item.publishedAt ? formatAbsoluteDate(parseDateSafe(item.publishedAt) || new Date()) : "Date n/a",
+          title: cleanText(item.title || "Mise à jour live"),
+          excerpt: cleanText(item.summary || item.title || ""),
+          quote: cleanText(item.summary || item.title || "").slice(0, 160),
+          sentiment,
+          tag: null,
+          priority: toPriority(sentiment, idx),
+          source_url: item.link || "",
+        };
+      });
+
+      const hotTopicsMentions = buildHotTopics(mentionsItems);
+      const contextEditorialItems = buildDiversifiedContext(contextItems, 60);
+      const hotTopicsLive = buildHotTopics(contextEditorialItems);
+      const weakSignalsLive = buildWeakSignals(contextEditorialItems);
+      const topCoveragesLive = buildTopCoverages(contextEditorialItems);
+      const predictionScenariosLive = buildPredictionScenarios(contextEditorialItems);
+      const contextMix = computeContextMixStats(contextEditorialItems);
+      const mentionsFreshnessLabel = formatAge(poolFreshness.mentions);
+      const contextFreshnessLabel = formatAge(poolFreshness.context);
+      const qaDataLive = hotTopicsLive.slice(0, 3).map((t, idx) => ({
+        topic: t.title,
+        question: `Quelle est la position officielle sur: ${t.title} ?`,
+        answer: "Position factuelle et actualisée en continu. Validation avec les équipes communication et affaires publiques avant prise de parole.",
+        keyMessages: ["Factuel", "Source vérifiable", "Message cohérent"],
+        pivots: ["Discipline d'exécution", "Vision long terme"],
+        avoid: [idx === 0 ? "Éviter les formulations spéculatives" : "Éviter les déclarations non sourcées", "Éviter les promesses sans échéance robuste"],
+      }));
+      const riskMatrixLive = weakSignalsLive.slice(0, 8).map((s, i) => ({
+        name: (s.signal || "").slice(0, 4).toUpperCase() || `S${i + 1}`,
+        risk: Math.max(0.2, Math.min(0.9, 0.82 - i * 0.06)),
+        opportunity: Math.max(0.1, Math.min(0.85, 0.28 + i * 0.07)),
+      }));
+      const geopoliticsLive = hotTopicsLive.slice(0, 3).map((t) => ({
+        emoji: t.emoji || "🌍",
+        title: t.title,
+        context: cleanText(t.brief).slice(0, 180),
+      }));
+      const macroSignalsLive = [
+        { emoji: "🛢️", indicator: "Brent", value: liveBenchmark.brent.price, change: liveBenchmark.brent.change, negative: String(liveBenchmark.brent.change || "").startsWith("-") },
+        { emoji: "⛽", indicator: "WTI", value: liveBenchmark.wti.price, change: liveBenchmark.wti.change, negative: String(liveBenchmark.wti.change || "").startsWith("-") },
+        { emoji: "💹", indicator: "TTE Paris", value: liveBenchmark.tte.price, change: liveBenchmark.tte.change, negative: String(liveBenchmark.tte.change || "").startsWith("-") },
+      ];
+      const contextSourceCount = Array.from(new Set(contextEditorialItems.map((i) => i.feedTitle || i.source))).length;
+
+      const sections = [
+        { id: "mentions", label: "01 MENTIONS", count: mentionsItems.length },
+        { id: "trial", label: "TRIAL WAR ROOM", count: trialItems.length || 0 },
+        { id: "brief", label: "02 BRIEF", count: 4 },
+        { id: "une", label: "03 À LA UNE", count: 1 },
+        { id: "signals", label: "04 SIGNALS", count: 2 },
+        { id: "intelligence", label: "05 INTELLIGENCE", count: 13 },
+        { id: "outils", label: "06 OUTILS", count: 10 },
+      ];
+
+      const handleOutilClick = (id) => {
+        if (id === "journalistes" || id === "retombees" || id === "edito") {
+          setSelectedOutil(id);
+        } else {
+          showNotification(`Génération ${id} en cours...`);
+        }
+      };
+
+      return (
+        <div className="min-h-screen bg-slate-950 text-slate-100">
+          {/* Header */}
+          <header className="sticky top-0 z-40 glass border-b border-slate-800">
+            <div className="max-w-7xl mx-auto px-4 py-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <button className="lg:hidden p-2 text-slate-400 hover:text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>☰</button>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-700 rounded-lg flex items-center justify-center font-bold text-white text-lg shadow-lg">TEN</div>
+                    <div className="hidden sm:block">
+                      <h1 className="font-bold text-white">TotalEnergies News <span className="text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded ml-2 animate-pulse-slow">🔴 LIVE</span></h1>
+                      <p className="text-xs text-slate-400">Dashboard V5 • 8 fév 2026 • <strong>32 Cards</strong></p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="hidden md:flex items-center gap-2 bg-slate-800 rounded-lg px-3 py-2">
+                    <span className="text-slate-400">🔍</span>
+                    <input type="text" placeholder="Rechercher..." className="bg-transparent text-sm text-white placeholder-slate-400 outline-none w-40" />
+                  </div>
+                  <button className="p-2 text-slate-400 hover:text-white relative">🔔<span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full text-[10px] flex items-center justify-center">4</span></button>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          {/* Navigation */}
+          <nav className={`lg:sticky lg:top-[65px] z-30 glass border-b border-slate-800 ${mobileMenuOpen ? 'block' : 'hidden lg:block'}`}>
+            <div className="max-w-7xl mx-auto px-4">
+              <div className="flex flex-col lg:flex-row lg:items-center gap-1 py-2 lg:py-0 overflow-x-auto">
+                {sections.map((s) => (
+                  <button key={s.id} onClick={() => { setActiveSection(s.id); setMobileMenuOpen(false); }} className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all whitespace-nowrap rounded-lg lg:rounded-none ${activeSection === s.id ? "text-white bg-slate-800 lg:bg-transparent lg:border-b-2 lg:border-red-500" : "text-slate-400 hover:text-white hover:bg-slate-800/50"}`}>
+                    {s.label}<span className="text-[10px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">{s.count}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </nav>
+
+          {/* Main */}
+          <main className="max-w-7xl mx-auto px-4 py-6">
+
+            {/* ========== 01 MENTIONS ========== */}
+            {activeSection === "mentions" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">Live Stream TotalEnergies <span className="text-xs font-normal text-slate-400">(MEN-01)</span></h2>
+                    <p className="text-slate-400 text-sm mt-1">Fiches structurées (7 derniers jours) • {mentionsDataLive.length} articles • MAJ {lastUpdated.toLocaleTimeString("fr-FR")} (auto: 2 min)</p>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      <span className="text-[10px] px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">Sources TTE actives: {mentionSources.length}</span>
+                      <span className="text-[10px] px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">Dernière MAJ réussie mentions: {mentionsFreshnessLabel}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-2 bg-red-500/20 text-red-400 rounded-lg text-sm">
+                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse-slow"></div>
+                    {mentionsDataLive.filter(m => m.priority === '🔴 Haute').length} PRIORITÉ HAUTE
+                  </div>
+                </div>
+                <div className="grid gap-4">{mentionsDataLive.map((m) => (<MentionCard key={m.id} mention={m} onClick={() => setSelectedMention(m)} />))}</div>
+                <div className="flex flex-wrap gap-2">
+                  {mentionSources.slice(0, 12).map((s, i) => (
+                    <span key={i} className="text-[10px] px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">{s}</span>
+                  ))}
+                </div>
+
+                {/* MEN-02: 5 Sujets Chauds */}
+                <div className="mt-8">
+                  <h3 className="text-xl font-bold text-white mb-4">5 Sujets Chauds TTE <span className="text-xs font-normal text-slate-400">(MEN-02)</span></h3>
+                  <p className="text-sm text-slate-400 mb-4">5 sujets prioritaires avec recommandation d'action pour l'équipe comm</p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse min-w-[900px]">
+                      <thead><tr className="border-b border-slate-700"><th className="text-left py-3 px-4 text-xs font-semibold text-slate-400 uppercase">Sujet</th><th className="text-left py-3 px-4 text-xs font-semibold text-slate-400 uppercase">En Bref</th><th className="text-left py-3 px-4 text-xs font-semibold text-slate-400 uppercase">Action Com</th><th className="text-left py-3 px-4 text-xs font-semibold text-slate-400 uppercase">Impact</th><th className="text-left py-3 px-4 text-xs font-semibold text-slate-400 uppercase">Statut</th></tr></thead>
+                      <tbody>
+                        {hotTopicsMentions.map((t) => {
+                          const bg = t.nature === "critical" ? "bg-red-500/5" : t.nature === "positive" ? "bg-emerald-500/5" : "bg-slate-800/30";
+                          return (<tr key={t.id} className={`${bg} border-b border-slate-800 hover:bg-slate-800/50 cursor-pointer`} onClick={() => setSelectedTopic(t)}><td className="py-4 px-4"><div className="flex items-center gap-2"><span className="text-xl">{t.emoji}</span><div><div className="font-semibold text-white">{t.title}</div><div className="text-xs text-slate-400">{t.subtitle}</div></div></div></td><td className="py-4 px-4 text-sm text-slate-300 max-w-md" dangerouslySetInnerHTML={{ __html: t.brief }} /><td className="py-4 px-4"><ul className="text-sm text-slate-400 space-y-1">{t.actions.slice(0, 2).map((a, i) => <li key={i}>• {a}</li>)}</ul></td><td className="py-4 px-4"><ImpactBadge impact={t.impact} /></td><td className="py-4 px-4"><StatusBadge status={t.status} /></td></tr>);
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ========== TRIAL WAR ROOM ========== */}
+            {activeSection === "trial" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">Trial War Room • Procès climat / devoir de vigilance</h2>
+                    <p className="text-slate-400 text-sm mt-1">Filtre ciblé : TotalEnergies, Pouyanné, procès climat (19-20 fév.), vigilance, ONG (Sherpa, NAAT, FNE, Amnesty, Greenpeace), Belgique/Tournai/Hugues Falys. MAJ {lastUpdated.toLocaleTimeString("fr-FR")}.</p>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      <span className="text-[10px] px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">Items: {trialItems.length}</span>
+                      <span className="text-[10px] px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">Sources: {trialSources.length}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-2 bg-orange-500/20 text-orange-300 rounded-lg text-sm">
+                    <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse-slow"></div>
+                    Surveillance audiences 19-20/02 + Belgique
+                  </div>
+                </div>
+                <div className="grid gap-4">{trialItems.map((m) => (<MentionCard key={m.id} mention={m} onClick={() => setSelectedMention(m)} />))}</div>
+                <div className="flex flex-wrap gap-2">
+                  {trialSources.slice(0, 24).map((s, i) => (
+                    <span key={i} className="text-[10px] px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">{s}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ========== 02 BRIEF ========== */}
+            {activeSection === "brief" && (
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-white">Brief Quotidien</h2>
+                  <p className="text-slate-400 text-sm mt-1">4 Cards : BRF-01 à BRF-04 • {contextEditorialItems.length} actus éditorialisées • MAJ {lastUpdated.toLocaleTimeString("fr-FR")}</p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    <span className="text-[10px] px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">Sources Contexte actives: {contextSourceCount}</span>
+                    <span className="text-[10px] px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">% TTE: {contextMix.ttePct}%</span>
+                    <span className="text-[10px] px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">% non-TTE: {contextMix.nonTtePct}%</span>
+                    <span className="text-[10px] px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">Thèmes couverts top12: {contextMix.themesTop12.length}</span>
+                    <span className="text-[10px] px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">Dernière MAJ réussie contexte: {contextFreshnessLabel}</span>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {contextSources.slice(0, 12).map((s, i) => (
+                    <span key={i} className="text-[10px] px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">{s}</span>
+                  ))}
+                </div>
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <BriefCard emoji="🔴" title="5 Sujets Chauds" code="BRF-01" color="red">
+                    <p className="text-xs text-slate-400 mb-2">Format card compact WhatsApp-ready</p>
+                    <ul className="space-y-2">{hotTopicsLive.map((t) => (<li key={t.id} className={`p-2 rounded-lg cursor-pointer hover:bg-slate-800/50 ${t.nature === "critical" ? "bg-red-500/10 border-l-2 border-red-500" : "bg-slate-800/30"}`} onClick={() => { setSelectedTopic(t); }}><div className="flex items-center gap-2"><span>{t.emoji}</span><span className="text-sm font-medium text-white">{t.title}</span>{t.status === "🔥 Chaud" && <span className="text-xs text-red-400">🔥</span>}</div></li>))}</ul>
+                  </BriefCard>
+                  <BriefCard emoji="🌍" title="3 Lectures Géo" code="BRF-02" color="blue">
+                    <p className="text-xs text-slate-400 mb-2">Contexte stratégique TotalEnergies</p>
+                    <ul className="space-y-2">{geopoliticsLive.map((g, i) => (<li key={i} className="p-2 rounded-lg bg-slate-800/30"><div className="flex items-center gap-2 mb-1"><span>{g.emoji}</span><span className="text-sm font-medium text-white">{g.title}</span></div><p className="text-xs text-slate-400 pl-6 line-clamp-2">{g.context}</p></li>))}</ul>
+                  </BriefCard>
+                  <BriefCard emoji="⚡" title="3 Signaux Macro" code="BRF-03" color="orange">
+                    <p className="text-xs text-slate-400 mb-2">Indicateurs économiques/marchés</p>
+                    <ul className="space-y-2">{macroSignalsLive.map((m, i) => (<li key={i} className="p-2 rounded-lg bg-slate-800/30 flex items-center justify-between"><div className="flex items-center gap-2"><span>{m.emoji}</span><span className="text-sm text-slate-300">{m.indicator}</span></div><div className="text-right"><div className="font-bold text-white">{m.value}</div><div className={`text-xs ${m.negative ? "text-red-400" : "text-emerald-400"}`}>{m.change}</div></div></li>))}</ul>
+                  </BriefCard>
+                  <BriefCard emoji="📅" title="Agenda" code="" color="green">
+                    <ul className="space-y-2 text-sm">
+                      <li className="p-2 bg-red-500/10 border-l-2 border-red-500 rounded-lg"><div className="font-medium text-white">1 fév</div><div className="text-slate-400">Réunion OPEC+</div></li>
+                      <li className="p-2 bg-slate-800/30 rounded-lg"><div className="font-medium text-white">11 fév</div><div className="text-slate-400">Résultats Q4 2025</div></li>
+                      <li className="p-2 bg-slate-800/30 rounded-lg"><div className="font-medium text-white">Avril</div><div className="text-slate-400">Fin affichage greenwashing</div></li>
+                    </ul>
+                  </BriefCard>
+                </div>
+                {/* BRF-04: Opinion du Jour */}
+                <div className="bg-slate-800/30 border border-emerald-500/30 border-l-4 border-l-emerald-500 rounded-xl p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-bold text-white">📰 Opinion du Jour</h3>
+                    <span className="text-[10px] text-slate-500 font-mono">BRF-04</span>
+                  </div>
+                  <p className="text-xs text-slate-400 mb-4">Édito analytique reliant tous les faits en narration stratégique</p>
+                  <div className="space-y-4 text-slate-300 text-sm leading-relaxed">
+                    <p><strong className="text-white">La Namibie devient l'axe d'expansion le plus visible de la semaine.</strong> L'entrée dans PEL 104 crée un récit de croissance exploration, mais accroît aussi la sensibilité réputationnelle offshore.</p>
+                    <p><strong className="text-white">Le MoU Koweït consolide l'empreinte moyen-orientale.</strong> Le signal stratégique est positif, avec un enjeu clé: transformer rapidement le cadre en livrables opérationnels crédibles.</p>
+                    <p><strong className="text-white">Le cycle médiatique reste dominé par la volatilité pétrole.</strong> Entre OPEC+, tensions Iran et signaux macro américains, la narration marchés peut basculer en quelques heures.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ========== 03 À LA UNE ========== */}
+            {activeSection === "une" && (
+              <div className="space-y-6">
+                <div><h2 className="text-2xl font-bold text-white">Top Couvertures <span className="text-xs font-normal text-slate-400">(UNE-01)</span></h2><p className="text-slate-400 text-sm mt-1">3-4 articles majeurs que les dirigeants doivent connaître • sources contexte élargies</p></div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {topCoveragesLive.map((a) => (
+                    <div key={a.id} className={`bg-slate-800/50 border rounded-xl p-5 cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all ${a.critical ? "border-red-500/50" : "border-slate-700"}`}>
+                      <div className="flex items-center justify-between mb-3"><div className="flex items-center gap-2"><span className="text-xs font-bold text-slate-300 uppercase">{a.source}</span><span className="px-2 py-0.5 text-xs bg-slate-700 text-slate-300 rounded">{a.tag}</span></div>{a.critical && <span className="text-lg">🔥</span>}</div>
+                      <h4 className="font-semibold text-white mb-2">{a.title}</h4>
+                      <p className="text-sm text-slate-400">{a.excerpt}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ========== 04 SIGNALS ========== */}
+            {activeSection === "signals" && (
+              <div className="space-y-6">
+                <div><h2 className="text-2xl font-bold text-white">8 Weak Signals <span className="text-xs font-normal text-slate-400">(SIG-01)</span></h2><p className="text-slate-400 text-sm mt-1">Tendances émergentes à 6 mois (géopolitique, conjoncture, politique)</p></div>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse min-w-[800px]">
+                    <thead><tr className="border-b border-slate-700"><th className="text-left py-3 px-4 text-xs font-semibold text-slate-400 uppercase">Signal</th><th className="text-left py-3 px-4 text-xs font-semibold text-slate-400 uppercase">Contexte</th><th className="text-left py-3 px-4 text-xs font-semibold text-slate-400 uppercase">Horizon</th><th className="text-left py-3 px-4 text-xs font-semibold text-slate-400 uppercase">Impact</th></tr></thead>
+                    <tbody>
+                      {weakSignalsLive.map((s, i) => {
+                        const bg = s.nature === "critical" ? "bg-red-500/5" : s.nature === "positive" ? "bg-emerald-500/5" : "bg-slate-800/30";
+                        const urgent = s.horizon === "Immédiat" || s.horizon.includes("48");
+                        return (<tr key={i} className={`${bg} border-b border-slate-800 hover:bg-slate-800/50 cursor-pointer`} onClick={() => setSelectedSignal(s)}><td className="py-4 px-4"><div className="flex items-center gap-2"><span className="text-xl">{s.emoji}</span><span className="font-semibold text-white">{s.signal}</span></div></td><td className="py-4 px-4 text-sm text-slate-300 max-w-lg">{s.context}</td><td className="py-4 px-4"><span className={`text-sm font-medium ${urgent ? "text-red-400" : "text-slate-300"}`}>{s.horizon}</span></td><td className="py-4 px-4"><ImpactBadge impact={s.impact} /></td></tr>);
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                {/* SIG-02: Benchmark */}
+                <div className="bg-slate-800/30 border border-blue-500/30 border-l-4 border-l-blue-500 rounded-xl p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-lg font-bold text-white">📊 Benchmark Marchés & Pairs</h3>
+                    <span className="text-[10px] text-slate-500 font-mono">SIG-02</span>
+                  </div>
+                  <p className="text-xs text-slate-400 mb-3">TTE vs concurrents et indices</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+                    <div className="bg-slate-800 p-3 rounded-lg text-center"><div className="text-xs text-slate-400">TTE Paris</div><div className="font-bold text-white">{liveBenchmark.tte.price}</div><div className="text-xs text-emerald-400">{liveBenchmark.tte.change}</div></div>
+                    <div className="bg-slate-800 p-3 rounded-lg text-center"><div className="text-xs text-slate-400">TTE NYSE</div><div className="font-bold text-white">{liveBenchmark.tteNyse.price}</div><div className="text-xs text-emerald-400">{liveBenchmark.tteNyse.change}</div></div>
+                    <div className="bg-slate-800 p-3 rounded-lg text-center"><div className="text-xs text-slate-400">Shell</div><div className="font-bold text-white">{liveBenchmark.shell.price}</div><div className="text-xs text-emerald-400">{liveBenchmark.shell.change}</div></div>
+                    <div className="bg-slate-800 p-3 rounded-lg text-center"><div className="text-xs text-slate-400">BP</div><div className="font-bold text-white">{liveBenchmark.bp.price}</div><div className="text-xs text-red-400">{liveBenchmark.bp.change || liveBenchmark.bp.ytd}</div></div>
+                    <div className="bg-slate-800 p-3 rounded-lg text-center"><div className="text-xs text-slate-400">Chevron</div><div className="font-bold text-white">{liveBenchmark.chevron.price}</div><div className="text-xs text-emerald-400">{liveBenchmark.chevron.change}</div></div>
+                    <div className="bg-slate-800 p-3 rounded-lg text-center"><div className="text-xs text-slate-400">Brent</div><div className="font-bold text-white">{liveBenchmark.brent.price}</div><div className="text-xs text-emerald-400">{liveBenchmark.brent.change}</div></div>
+                    <div className="bg-slate-800 p-3 rounded-lg text-center"><div className="text-xs text-slate-400">WTI</div><div className="font-bold text-white">{liveBenchmark.wti.price}</div><div className="text-xs text-emerald-400">{liveBenchmark.wti.change}</div></div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ========== 05 INTELLIGENCE ========== */}
+            {activeSection === "intelligence" && (
+              <div className="space-y-6">
+                <div><h2 className="text-2xl font-bold text-white">Intelligence Center</h2><p className="text-slate-400 text-sm mt-1">13 Cards : INT-01 à INT-13</p></div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">{intelligenceCards.map((c) => (<IntelligenceCard key={c.id} card={c} onClick={() => setSelectedIntelligence(c.id)} />))}</div>
+              </div>
+            )}
+
+            {/* ========== 06 OUTILS ========== */}
+            {activeSection === "outils" && (
+              <div className="space-y-6">
+                <div><h2 className="text-2xl font-bold text-white">Outils de Production</h2><p className="text-slate-400 text-sm mt-1">10 Cards : OUT-01 à OUT-10</p></div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">{outilsCards.map((t) => (<ToolCard key={t.id} tool={t} onClick={handleOutilClick} />))}</div>
+              </div>
+            )}
+          </main>
+
+          {/* Toast */}
+          {showToast && (<div className="fixed bottom-6 right-6 bg-emerald-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 z-50"><div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>{toastMessage}</div>)}
+
+          {/* ========== MODALS ========== */}
+
+          {/* Mention Detail */}
+          <Modal isOpen={!!selectedMention} onClose={() => setSelectedMention(null)} title={selectedMention?.title || ""}>
+            {selectedMention && (<div className="space-y-4"><div className="flex items-center gap-3 flex-wrap"><span className="text-2xl">{selectedMention.country}</span><span className="font-bold text-slate-300">{selectedMention.source}</span><PriorityBadge priority={selectedMention.priority} /></div><p className="text-slate-300">{selectedMention.excerpt}</p><div className="bg-slate-800 p-4 rounded-lg border-l-4 border-slate-600"><p className="text-slate-200 italic">"{selectedMention.quote}"</p></div>{selectedMention.source_url && (<button className="w-full py-3 bg-red-600 hover:bg-red-500 rounded-lg text-white font-medium" onClick={() => window.open(selectedMention.source_url, '_blank')}>🔗 Ouvrir l'article source</button>)}</div>)}
+          </Modal>
+
+          {/* Topic Detail */}
+          <Modal isOpen={!!selectedTopic} onClose={() => setSelectedTopic(null)} title={selectedTopic ? `${selectedTopic.emoji} ${selectedTopic.title}` : ""}>
+            {selectedTopic && (<div className="space-y-4"><p className="text-slate-400 text-sm">{selectedTopic.subtitle}</p><div className="flex gap-2"><ImpactBadge impact={selectedTopic.impact} /><StatusBadge status={selectedTopic.status} /></div><div><h4 className="font-semibold text-white mb-2">En Bref</h4><p className="text-slate-300" dangerouslySetInnerHTML={{ __html: selectedTopic.brief }} /></div><div><h4 className="font-semibold text-white mb-2">Actions Recommandées</h4><ul className="space-y-2">{selectedTopic.actions.map((a, i) => (<li key={i} className="flex items-start gap-2 text-slate-300"><span className="text-slate-500">→</span>{a}</li>))}</ul></div></div>)}
+          </Modal>
+
+          {/* Signal Detail */}
+          <Modal isOpen={!!selectedSignal} onClose={() => setSelectedSignal(null)} title={selectedSignal ? `${selectedSignal.emoji} ${selectedSignal.signal}` : ""}>
+            {selectedSignal && (<div className="space-y-4"><div className="flex items-center gap-3"><span className="text-slate-400">Horizon:</span><span className="font-medium text-white">{selectedSignal.horizon}</span><ImpactBadge impact={selectedSignal.impact} /></div><div><h4 className="font-semibold text-white mb-2">Analyse</h4><p className="text-slate-300">{selectedSignal.context}</p></div></div>)}
+          </Modal>
+
+          {/* INT-01: Prédiction 48h */}
+          <Modal isOpen={selectedIntelligence === "prediction"} onClose={() => setSelectedIntelligence(null)} title="🔮 Prédiction 48h (INT-01)">
+            <p className="text-xs text-slate-400 mb-4">5 scénarios probabilisés pour anticiper les médias</p>
+            <div className="space-y-3">{predictionScenariosLive.map((s, i) => (<div key={i} className="bg-slate-800 p-4 rounded-lg"><div className="flex items-center justify-between mb-2"><h4 className="font-semibold text-white">{s.title}</h4><span className={`text-lg font-bold ${s.probability >= 70 ? "text-red-400" : s.probability >= 50 ? "text-yellow-400" : "text-emerald-400"}`}>{s.probability}%</span></div><div className="grid grid-cols-2 gap-4 text-sm"><div><span className="text-slate-400">Trigger:</span><p className="text-slate-300">{s.trigger}</p></div><div><span className="text-slate-400">Action:</span><p className="text-slate-300">{s.action}</p></div></div></div>))}</div>
+          </Modal>
+
+          {/* INT-02: Alerte Crise */}
+          <Modal isOpen={selectedIntelligence === "alert"} onClose={() => setSelectedIntelligence(null)} title="🚨 Alerte Crise TotalEnergies (INT-02)">
+            <p className="text-xs text-slate-400 mb-4">Surveillance temps réel - Alerte si zone de crise médiatique</p>
+            <div className="space-y-4">
+              <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-4 text-center"><div className="text-4xl mb-2">⚠️</div><h4 className="text-lg font-bold text-red-400">2 Sujets en Zone Critique</h4></div>
+              <ul className="space-y-2">{hotTopicsLive.slice(0, 3).map((t, i) => (
+                <li key={i} className={`flex items-center justify-between p-3 rounded-lg border-l-2 ${i < 2 ? "bg-red-500/10 border-red-500" : "bg-orange-500/10 border-orange-500"}`}>
+                  <span className="text-slate-300">{t.emoji} {t.title}</span>
+                  <span className={`text-sm ${i < 2 ? "text-red-400" : "text-orange-400"}`}>{i < 2 ? "🔥 Critique" : "Élevé"}</span>
+                </li>
+              ))}</ul>
+            </div>
+          </Modal>
+
+          {/* INT-03: Q&A */}
+          <Modal isOpen={selectedIntelligence === "qa"} onClose={() => setSelectedIntelligence(null)} title="💬 Q&A TotalEnergies (INT-03)">
+            <p className="text-xs text-slate-400 mb-4">Réponses prêtes à l'emploi pour les porte-paroles</p>
+            <div className="space-y-3">{qaDataLive.map((q, i) => (<details key={i} className="bg-slate-800 rounded-lg overflow-hidden"><summary className="p-4 cursor-pointer hover:bg-slate-700 font-semibold text-white">{q.topic}</summary><div className="p-4 pt-0 space-y-3 border-t border-slate-700"><div><span className="text-xs text-slate-400 uppercase">Question</span><p className="text-white font-medium">{q.question}</p></div><div><span className="text-xs text-slate-400 uppercase">Réponse</span><p className="text-slate-300">{q.answer}</p></div><div className="grid grid-cols-2 gap-4"><div><span className="text-xs text-emerald-400 uppercase">Messages Clés</span><ul className="text-sm text-slate-400">{q.keyMessages.map((m, j) => <li key={j}>• {m}</li>)}</ul></div><div><span className="text-xs text-blue-400 uppercase">Pivots</span><ul className="text-sm text-slate-400">{q.pivots.map((p, j) => <li key={j}>• {p}</li>)}</ul></div></div><div><span className="text-xs text-red-400 uppercase">À Ne Pas Dire</span><ul className="text-sm text-slate-400">{q.avoid.map((a, j) => <li key={j}>⚠️ {a}</li>)}</ul></div></div></details>))}</div>
+          </Modal>
+
+          {/* INT-04: Matrice */}
+          <Modal isOpen={selectedIntelligence === "matrix"} onClose={() => setSelectedIntelligence(null)} title="⚖️ Matrice Risque/Opportunité (INT-04)">
+            <p className="text-xs text-slate-400 mb-4">Scoring automatique pour prioriser les actions</p>
+            <div className="space-y-4">
+              <div className="relative bg-slate-800 rounded-lg p-4 h-72">
+                <div className="absolute left-10 top-4 bottom-14 w-px bg-slate-600"></div>
+                <div className="absolute left-10 right-4 bottom-14 h-px bg-slate-600"></div>
+                <span className="absolute left-1 top-1/2 text-xs text-slate-400 -rotate-90 origin-center">Risque →</span>
+                <span className="absolute right-4 bottom-6 text-xs text-slate-400">Opportunité →</span>
+                {riskMatrixLive.map((d, i) => (<div key={i} className="absolute" style={{ left: `${12 + d.opportunity * 75}%`, bottom: `${18 + d.risk * 55}%` }}><div className={`w-10 h-10 rounded-full flex items-center justify-center text-[10px] font-bold text-white cursor-pointer hover:scale-110 transition-transform ${d.risk > 0.6 ? "bg-red-500" : d.opportunity > 0.55 ? "bg-emerald-500" : "bg-blue-500"}`} title={d.name}>{d.name}</div></div>))}
+              </div>
+              <div className="grid grid-cols-3 gap-2 text-xs"><div className="flex items-center gap-2"><div className="w-3 h-3 bg-red-500 rounded-full"></div><span className="text-slate-400">Risque élevé</span></div><div className="flex items-center gap-2"><div className="w-3 h-3 bg-emerald-500 rounded-full"></div><span className="text-slate-400">Opportunité</span></div><div className="flex items-center gap-2"><div className="w-3 h-3 bg-blue-500 rounded-full"></div><span className="text-slate-400">À surveiller</span></div></div>
+            </div>
+          </Modal>
+
+          {/* INT-05: Écho Social */}
+          <Modal isOpen={selectedIntelligence === "social"} onClose={() => setSelectedIntelligence(null)} title="📱 Écho Social TotalEnergies (INT-05)">
+            <p className="text-xs text-slate-400 mb-4">Mesure des conversations et détection buzz négatif</p>
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-4"><div className="bg-slate-800 p-4 rounded-lg text-center"><div className="text-2xl font-bold text-white">41.6K</div><div className="text-xs text-slate-400">Mentions / 24h</div></div><div className="bg-slate-800 p-4 rounded-lg text-center"><div className="text-2xl font-bold text-emerald-400">+118%</div><div className="text-xs text-slate-400">vs semaine dernière</div></div><div className="bg-slate-800 p-4 rounded-lg text-center"><div className="text-2xl font-bold text-red-400">33%</div><div className="text-xs text-slate-400">Sentiment négatif</div></div></div>
+              <div><h4 className="font-semibold text-white mb-2">Trending</h4><div className="flex flex-wrap gap-2">{hotTopicsLive.slice(0, 5).map((t, i) => (<span key={i} className="px-3 py-1 bg-slate-800 rounded-full text-sm text-slate-300">#{cleanText(t.title).split(" ").slice(0, 2).join("")}</span>))}</div></div>
+            </div>
+          </Modal>
+
+          {/* INT-06: Narratif Adverse */}
+          <Modal isOpen={selectedIntelligence === "ong"} onClose={() => setSelectedIntelligence(null)} title="🎯 Décryptage Narratif Adverse (INT-06)" wide>
+            <p className="text-xs text-slate-400 mb-4">Campagnes ONG/activistes avec contre-arguments et calendrier risques</p>
+            <div className="space-y-4">
+              <table className="w-full text-sm">
+                <thead><tr className="border-b border-slate-700"><th className="text-left py-2 text-slate-400">ONG</th><th className="text-left py-2 text-slate-400">Campagne</th><th className="text-center py-2 text-slate-400">Risque</th><th className="text-left py-2 text-slate-400">Prochaine action</th></tr></thead>
+                <tbody>{ongData.map((o, i) => (<tr key={i} className="border-b border-slate-800"><td className="py-3 text-white font-medium">{o.name}</td><td className="py-3 text-slate-300">{o.campaign}</td><td className="py-3 text-center">{o.risk}</td><td className="py-3 text-slate-400">{o.next}</td></tr>))}</tbody>
+              </table>
+            </div>
+          </Modal>
+
+          {/* INT-07: One-Pager */}
+          <Modal isOpen={selectedIntelligence === "onepager"} onClose={() => setSelectedIntelligence(null)} title="📄 Brief Exécutif One-Pager (INT-07)">
+            <p className="text-xs text-slate-400 mb-4">One-pager préparation média pour Pouyanné</p>
+            <div className="bg-white text-slate-900 p-6 rounded-lg">
+              <div className="border-b pb-2 mb-4"><h4 className="font-bold text-lg">BRIEF DIRIGEANT • {lastUpdated.toLocaleDateString("fr-FR").toUpperCase()}</h4></div>
+              <div className="grid grid-cols-3 gap-4 text-sm mb-4">{hotTopicsLive.slice(0, 3).map((t, i) => (
+                <div key={i} className={`border-l-4 pl-3 ${i === 0 ? "border-red-500" : i === 1 ? "border-orange-500" : "border-yellow-500"}`}>
+                  <strong>{cleanText(t.title).slice(0, 18).toUpperCase()}</strong><br/>{cleanText(t.subtitle).slice(0, 32)}<br/><em className="text-xs">→ {t.actions[0]}</em>
+                </div>
+              ))}</div>
+              <div className="bg-slate-100 p-3 rounded mb-3"><strong>Messages à placer:</strong> Portefeuille discipliné • Partenariats stratégiques • Résilience opérationnelle</div>
+              <div className="bg-red-100 p-3 rounded text-red-800"><strong>Éviter:</strong> Surpromettre sur l'offshore • Spéculer sur le prix du brut</div>
+            </div>
+          </Modal>
+
+          {/* INT-08: Opinion Élite */}
+          <Modal isOpen={selectedIntelligence === "elite"} onClose={() => setSelectedIntelligence(null)} title="🎓 État de l'Opinion Élite (INT-08)">
+            <p className="text-xs text-slate-400 mb-4">Lecture prescripteurs: ce qui est dicible, risqué ou radioactif</p>
+            <div className="space-y-3">
+              <div className="bg-slate-800 p-4 rounded-lg">
+                <div className="text-sm text-slate-400 mb-2">Thermomètre</div>
+                <div className="text-lg font-bold text-orange-300">🟠 Neutre sous tension</div>
+              </div>
+              <div className="grid md:grid-cols-3 gap-3 text-sm">
+                <div className="bg-emerald-500/10 rounded-lg p-3"><div className="font-semibold text-emerald-300 mb-1">Dicible</div><p className="text-slate-300">Partenariats stratégiques et discipline capital.</p></div>
+                <div className="bg-yellow-500/10 rounded-lg p-3"><div className="font-semibold text-yellow-300 mb-1">Risque</div><p className="text-slate-300">Offshore Namibie sans preuve d'exécution et cadre de risques.</p></div>
+                <div className="bg-red-500/10 rounded-lg p-3"><div className="font-semibold text-red-300 mb-1">Radioactif</div><p className="text-slate-300">Prévisions de prix du brut et promesses de production spéculatives.</p></div>
+              </div>
+            </div>
+          </Modal>
+
+          {/* INT-09: Fenêtres de Parole */}
+          <Modal isOpen={selectedIntelligence === "windows"} onClose={() => setSelectedIntelligence(null)} title="⏰ Fenêtres de Parole & Silence (INT-09)">
+            <p className="text-xs text-slate-400 mb-4">Timing recommandé sur les sujets 7 derniers jours</p>
+            <div className="space-y-3 text-sm">
+              <div className="bg-slate-800 rounded-lg p-3"><strong className="text-emerald-300">PARLER :</strong> Namibie PEL 104 (vision long terme) et MoU KPC (ancrage partenariat).</div>
+              <div className="bg-slate-800 rounded-lg p-3"><strong className="text-yellow-300">SE TAIRE :</strong> Spéculations court terme sur trajectoire du Brent/WTI.</div>
+              <div className="bg-slate-800 rounded-lg p-3"><strong className="text-blue-300">LAISSER PARLER :</strong> Analyses marchés tierces (banques/courtiers) sur volatilité secteur.</div>
+              <div className="bg-slate-800 rounded-lg p-3"><strong className="text-red-300">ALERTE :</strong> Toute escalade US-Iran ou nouvelle inflexion OPEC+.</div>
+            </div>
+          </Modal>
+
+          {/* INT-10: Lecture Politique */}
+          <Modal isOpen={selectedIntelligence === "politics"} onClose={() => setSelectedIntelligence(null)} title="🏛️ Lecture Politique Anticipée (INT-10)">
+            <p className="text-xs text-slate-400 mb-4">Passage média → politique → réglementaire</p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead><tr className="border-b border-slate-700"><th className="text-left py-2 text-slate-400">Sujet</th><th className="text-left py-2 text-slate-400">Niveau</th><th className="text-left py-2 text-slate-400">Tendance</th><th className="text-left py-2 text-slate-400">Proba régulation</th></tr></thead>
+                <tbody>
+                  <tr className="border-b border-slate-800"><td className="py-2 text-white">Offshore Namibie</td><td className="py-2 text-slate-300">Média</td><td className="py-2 text-yellow-300">↑ Politisation possible</td><td className="py-2 text-slate-300">45%</td></tr>
+                  <tr className="border-b border-slate-800"><td className="py-2 text-white">MoU KPC</td><td className="py-2 text-slate-300">Institutionnel</td><td className="py-2 text-emerald-300">→ Stable</td><td className="py-2 text-slate-300">25%</td></tr>
+                  <tr className="border-b border-slate-800"><td className="py-2 text-white">Volatilité pétrole</td><td className="py-2 text-slate-300">Média/éco</td><td className="py-2 text-red-300">↑ Rapide</td><td className="py-2 text-slate-300">40%</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </Modal>
+
+          {/* INT-11: Crédibilité Corporate */}
+          <Modal isOpen={selectedIntelligence === "cred"} onClose={() => setSelectedIntelligence(null)} title="📊 Baromètre Crédibilité Corporate (INT-11)">
+            <p className="text-xs text-slate-400 mb-4">État de crédibilité sur les récits clés</p>
+            <div className="space-y-2 text-sm">
+              <div className="bg-slate-800 rounded p-3 flex justify-between"><span>Transition énergétique</span><span className="text-yellow-300">🟠 Sous surveillance</span></div>
+              <div className="bg-slate-800 rounded p-3 flex justify-between"><span>Partenariats internationaux</span><span className="text-emerald-300">🟢 Solide</span></div>
+              <div className="bg-slate-800 rounded p-3 flex justify-between"><span>Offshore Afrique</span><span className="text-yellow-300">🟠 Contestable</span></div>
+              <div className="bg-slate-800 rounded p-3 flex justify-between"><span>Discipline financière</span><span className="text-emerald-300">🟢 Solide</span></div>
+              <div className="bg-slate-800 rounded p-3 flex justify-between"><span>Narratif climat</span><span className="text-red-300">🔴 Fragile</span></div>
+            </div>
+          </Modal>
+
+          {/* INT-12: Narratifs Dormants */}
+          <Modal isOpen={selectedIntelligence === "narratives"} onClose={() => setSelectedIntelligence(null)} title="💎 Narratifs Favorables Dormants (INT-12)">
+            <p className="text-xs text-slate-400 mb-4">Récits positifs activables à court terme</p>
+            <ol className="space-y-2 text-sm text-slate-300">
+              <li className="bg-slate-800 rounded p-3">1. Expertise d'exécution en partenariats souverains (cas KPC).</li>
+              <li className="bg-slate-800 rounded p-3">2. Sélectivité portefeuille exploration (entrée ciblée PEL 104).</li>
+              <li className="bg-slate-800 rounded p-3">3. Résilience en contexte de volatilité prix énergie.</li>
+              <li className="bg-slate-800 rounded p-3">4. Capacité de pilotage multi-zones (Afrique, Golfe, Europe).</li>
+              <li className="bg-slate-800 rounded p-3">5. Gouvernance du risque dans les cycles marchés courts.</li>
+            </ol>
+          </Modal>
+
+          {/* INT-13: Saturation Médiatique */}
+          <Modal isOpen={selectedIntelligence === "saturation"} onClose={() => setSelectedIntelligence(null)} title="📉 Indice Saturation Médiatique (INT-13)">
+            <p className="text-xs text-slate-400 mb-4">Mesure de fatigue médiatique sur les thèmes chauds</p>
+            <div className="space-y-3">
+              <div className="bg-slate-800 rounded-lg p-3"><div className="flex justify-between text-sm"><span>Namibie offshore</span><span className="text-yellow-300">62/100</span></div><div className="text-xs text-slate-400">Visibilité forte, encore exploitable.</div></div>
+              <div className="bg-slate-800 rounded-lg p-3"><div className="flex justify-between text-sm"><span>MoU KPC</span><span className="text-emerald-300">44/100</span></div><div className="text-xs text-slate-400">Narratif encore frais.</div></div>
+              <div className="bg-slate-800 rounded-lg p-3"><div className="flex justify-between text-sm"><span>Volatilité pétrole</span><span className="text-red-300">78/100</span></div><div className="text-xs text-slate-400">Saturation élevée, privilégier sobriété.</div></div>
+            </div>
+          </Modal>
+
+          {/* OUT-08: Cartographie Journalistes */}
+          <Modal isOpen={selectedOutil === "journalistes"} onClose={() => setSelectedOutil(null)} title="👤 Cartographie Journalistes (OUT-08)" wide>
+            <p className="text-xs text-slate-400 mb-4">Fichier journalistes clés secteur énergie avec historique interactions</p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead><tr className="border-b border-slate-700"><th className="text-left py-2 text-slate-400">Journaliste</th><th className="text-left py-2 text-slate-400">Média</th><th className="text-left py-2 text-slate-400">Beat</th><th className="text-center py-2 text-slate-400">Position</th><th className="text-left py-2 text-slate-400">Dernier contact</th><th className="text-left py-2 text-slate-400">Notes</th></tr></thead>
+                <tbody>{journalistesData.map((j, i) => (<tr key={i} className="border-b border-slate-800 hover:bg-slate-800/50"><td className="py-3 text-white font-medium">{j.name}</td><td className="py-3 text-slate-300">{j.media}</td><td className="py-3 text-slate-400">{j.beat}</td><td className="py-3 text-center">{j.sentiment}</td><td className="py-3 text-slate-400">{j.lastContact}</td><td className="py-3 text-slate-500 text-xs">{j.notes}</td></tr>))}</tbody>
+              </table>
+            </div>
+          </Modal>
+
+          {/* OUT-09: Briefing Édito */}
+          <Modal isOpen={selectedOutil === "edito"} onClose={() => setSelectedOutil(null)} title="📝 Briefing Édito Quotidien (OUT-09)">
+            <p className="text-xs text-slate-400 mb-4">WhatsApp ready : Unes + éditos en 4-5 bullet points</p>
+            <div className="bg-slate-800 p-4 rounded-lg">
+              <div className="text-lg mb-3">📰 <strong>BRIEFING ÉDITO • {lastUpdated.toLocaleDateString("fr-FR")}</strong></div>
+              <ul className="space-y-2 text-sm">
+                {hotTopicsLive.slice(0, 4).map((t, i) => (
+                  <li key={i}>{t.emoji} <strong>{cleanText(t.title).slice(0, 28)}</strong> : {cleanText(t.brief).replace(/\s+/g, " ").slice(0, 110)}.</li>
+                ))}
+              </ul>
+              <div className="mt-4 pt-3 border-t border-slate-700 text-xs text-slate-400">
+                💬 <em>Copier ce brief et coller dans WhatsApp</em>
+              </div>
+            </div>
+          </Modal>
+
+          {/* OUT-10: Retombées CP */}
+          <Modal isOpen={selectedOutil === "retombees"} onClose={() => setSelectedOutil(null)} title="📊 Récapitulatif Retombées CP (OUT-10)" wide>
+            <p className="text-xs text-slate-400 mb-4">KPI retombées presse après communiqué</p>
+            <div className="space-y-4">
+              <div className="bg-slate-800 p-4 rounded-lg">
+                <div className="flex justify-between items-center mb-3">
+                  <div><h4 className="font-bold text-white">{retombeesCPData.cpTitle}</h4><p className="text-xs text-slate-400">{retombeesCPData.cpDate}</p></div>
+                </div>
+                <div className="grid grid-cols-4 gap-4 mb-4">
+                  <div className="text-center"><div className="text-2xl font-bold text-white">{retombeesCPData.kpis.totalRetombees}</div><div className="text-xs text-slate-400">Retombées totales</div></div>
+                  <div className="text-center"><div className="text-2xl font-bold text-emerald-400">{retombeesCPData.kpis.tonalitePositive}</div><div className="text-xs text-slate-400">Positives</div></div>
+                  <div className="text-center"><div className="text-2xl font-bold text-red-400">{retombeesCPData.kpis.tonaliteNegative}</div><div className="text-xs text-slate-400">Négatives</div></div>
+                  <div className="text-center"><div className="text-2xl font-bold text-blue-400">{retombeesCPData.kpis.reach}</div><div className="text-xs text-slate-400">Reach total</div></div>
+                </div>
+              </div>
+              <div>
+                <h4 className="font-semibold text-white mb-2">Top Retombées</h4>
+                <table className="w-full text-sm">
+                  <thead><tr className="border-b border-slate-700"><th className="text-left py-2 text-slate-400">Média</th><th className="text-left py-2 text-slate-400">Titre</th><th className="text-center py-2 text-slate-400">Tonalité</th><th className="text-right py-2 text-slate-400">Reach</th></tr></thead>
+                  <tbody>{retombeesCPData.topRetombees.map((r, i) => (<tr key={i} className="border-b border-slate-800"><td className="py-2 text-white">{r.media}</td><td className="py-2 text-slate-300">{r.titre}</td><td className="py-2 text-center">{r.tonalite}</td><td className="py-2 text-right text-slate-400">{r.reach}</td></tr>))}</tbody>
+                </table>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-emerald-500/10 p-3 rounded-lg"><h5 className="font-semibold text-emerald-400 text-sm mb-2">✅ Messages percés</h5><ul className="text-xs text-slate-300">{retombeesCPData.messagesPerces.map((m, i) => <li key={i}>• {m}</li>)}</ul></div>
+                <div className="bg-orange-500/10 p-3 rounded-lg"><h5 className="font-semibold text-orange-400 text-sm mb-2">⚠️ Messages non percés</h5><ul className="text-xs text-slate-300">{retombeesCPData.messagesNonPerces.map((m, i) => <li key={i}>• {m}</li>)}</ul></div>
+              </div>
+            </div>
+          </Modal>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<TENDashboard />);
+  </script>
+</body>
+</html>

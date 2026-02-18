@@ -113,7 +113,7 @@ const normalizeItem = (item, feedTitle, feedMeta) => {
     title: stripHtml(title),
     link: linkFromSummary || link,
     summary: summaryText,
-    publishedAt,
+    publishedAt: publishedAt || new Date().toISOString(),
     source,
     feedTitle,
     country: feedMeta?.country || "🌐",
